@@ -3,6 +3,9 @@ import compression from "compression";
 import cors from "cors";
 import cookieSession from "cookie-session";
 import config from "../src/config";
+import routes from "./routes";
+import ExceptionHandler from "../src/api/middlewares/ExceptionHandler";
+import { HttpException } from "../src/api/exceptions";
 
 
 const app = express();
@@ -22,5 +25,13 @@ app.use(
         secure: false,
     })
 );
+
+app.use(routes);
+
+app.all("*", (req: Request, res: Response, next: NextFunction) => {
+    next(new HttpException(`Requested path ${req.path} not found.`, 404));
+});
+
+app.use(ExceptionHandler);
 
 export default app;
