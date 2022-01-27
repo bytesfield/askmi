@@ -76,8 +76,7 @@ const execute = async (req: Request | any, res: Response, next: NextFunction) =>
 
     const otp = await otpService.generateOtp(email);
 
-    console.log(otp);
-    //get the absolute path to the view template with the file extension specified.
+    //Get the absolute path to the view template with the file extension specified.
     let emailVerificationPath = path.resolve('./src/views/email/auth/emailVerification.ejs');
 
     //Define the object that will get passed to the view. If there is no data to pass just pass an empty object.
@@ -88,6 +87,7 @@ const execute = async (req: Request | any, res: Response, next: NextFunction) =>
 
     };
 
+    //Email Verification Data
     const emailFrom: string = `${config.app.name} <${config.service.email.username}>`;
 
     const emailSubject: string = "Your Activation Link for YOUR APP";
@@ -98,6 +98,7 @@ const execute = async (req: Request | any, res: Response, next: NextFunction) =>
         context: verificationData
     }
 
+    //Send Email Verification link
     const emailService = new EmailService();
 
     await emailService.from(emailFrom).to(email).subject(emailSubject).template(emailTemplate).send();

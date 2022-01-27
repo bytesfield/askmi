@@ -9,31 +9,65 @@ export class EmailService implements EmailInterface {
     emailMessage!: string;
     emailTemplate!: object;
 
+    /**
+     * Gets Sender Email
+     * 
+     * @param email 
+     * @returns 
+     */
     public from(email: string): this {
         this.sender = email;
         return this;
     }
-
+    /**
+     * Gets Recipient Email
+     * 
+     * @param email 
+     * @returns this
+     */
     public to(email: string): this {
         this.recipient = email;
         return this;
     }
 
+    /**
+     * Gets Email Subject
+     * 
+     * @param subject 
+     * @returns this
+     */
     public subject(subject: string): this {
         this.emailSubject = subject;
         return this;
     }
 
+    /**
+     * Gets Email Message
+     * 
+     * @param message 
+     * @returns this
+     */
     public message(message: string): this {
         this.emailMessage = message;
         return this;
     }
 
+    /**
+     * Gets Email Template
+     * 
+     * @param template 
+     * @returns this
+     */
     public template(template: object): this {
         this.emailTemplate = template;
         return this;
     }
 
+    /**
+     * Sends the Actual Email
+     * 
+     * @returns Promise<any>
+     */
     public async send(): Promise<any> {
 
         const emailData = {
@@ -43,7 +77,9 @@ export class EmailService implements EmailInterface {
             text: 'text',
             template: this.emailTemplate
         };
+
         console.log(this.sender, this.recipient, this.emailSubject);
+
         return await nodemailer.mailgunService.sendMail(emailData);
 
     }

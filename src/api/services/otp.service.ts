@@ -9,6 +9,12 @@ import { generateRandomString } from "../../utils/helpers";
 
 export class OtpService implements OtpInterface {
 
+    /**
+     * Generates new Otp Token
+     * 
+     * @param email 
+     * @returns Promise<string>
+     */
     public async generateOtp(email: string): Promise<string> {
         const userRepo: UserRepository = new UserRepository(db.User);
 
