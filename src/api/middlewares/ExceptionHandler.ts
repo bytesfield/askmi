@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { buildResponse, serverError } from "../responses";
 import config from "../../config";
-
+import constants from '../../utils/constants.util';
 
 export default (error: any, req: Request, res: Response, next: NextFunction) => {
 
@@ -10,8 +10,7 @@ export default (error: any, req: Request, res: Response, next: NextFunction) => 
     const message: string = error.message || "Server Error Occured";
     const isOperational: string = error.isOperational || false;
 
-    if (config.app.env == 'production') {
-
+    if (config.app.env === constants.env.production) {
         if (!isOperational) {
             return serverError(res, 'Something went wrong.');
         }

@@ -34,3 +34,11 @@ export const isValidPassword = (password: string): boolean | undefined => {
 export const addMinutes = (mins: number): Date => {
     return new Date(new Date().getTime() + mins * 60000);
 }
+
+export const isNull = (value: any): boolean => {
+    if (typeof value === 'undefined' || value === null) {
+        return true;
+    }
+
+    return false;
+}

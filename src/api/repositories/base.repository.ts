@@ -5,66 +5,86 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T> {
 
     protected _model: any;
 
-    constructor(model: any) {
+    constructor(model: T) {
         this._model = model;
     }
 
     /**
      * Creates a new Model Instance to DB
      * 
-     * @param item 
+     * @param T item 
+     * 
      * @returns Promise<T>
      */
     public async create(item: T): Promise<T> {
-        const result = await this._model.create(item);
-
-        return result;
+        return await this._model.create(item);
     }
 
     /**
      * Updated a Model
      * 
-     * @param id 
-     * @param item 
+     * @param number id 
+     * @param T item 
+     * 
      * @returns Promise<T>
      */
     public async update(id: number, item: T): Promise<T> {
-        const result = await this._model.update(item, { where: { id: id } });
-
-        return result;
+        return await this._model.update(item, { where: { id: id } });
     }
 
     /**
      * Delete a Model
-     * @param id 
+     * 
+     * @param number id 
+     * 
      * @returns Promise<boolean>
      */
     public async delete(id: number): Promise<boolean> {
-        const result = await this._model.destroy({ where: { id: id } });
+        return await this._model.destroy({ where: { id: id } });
+    }
 
-        return result;
+    /**
+     * Delete a Model with multiple
+     * 
+     * @param object obj 
+     * 
+     * @returns Promise<boolean>
+     */
+    public async deleteMultiple(obj: object): Promise<boolean> {
+        return await this._model.destroy({ where: obj });
     }
 
     /**
      * Find All Result of a Model
-     * @param item 
+     * 
+     * @param T item 
+     * 
      * @returns Promise<T[]>
      */
     public async find(item: T): Promise<T[]> {
-        const result = this._model.findAll();
-
-        return result;
+        return this._model.findAll();
     }
 
     /**
      * Find One Result of a Model
-     * @param id 
-     * @returns Promise<T[>
+     * 
+     * @param number id 
+     * 
+     * @returns Promise<T>
      */
     public async findOne(id: number): Promise<T> {
-        const result = await this._model.findOne({ where: { id: id } });
+        return await this._model.findOne({ where: { id: id } });
+    }
 
-        return result;
+    /**
+     * Find One Result of a Model with multiple conditions
+     * 
+     * @param object obj 
+     * 
+     * @returns Promise<T>
+     */
+    public async findByMultiple(obj: object): Promise<T> {
+        return await this._model.findOne({ where: obj });
     }
 
 } 

@@ -11,7 +11,6 @@ const mailgunAuth: { auth: { api_key: string, domain: string } } = {
 };
 
 const emailServiceAuth: object = {
-
     host: config.service.email.host,
     port: config.service.email.port,
     secure: true,

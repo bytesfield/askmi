@@ -5,8 +5,7 @@ import config from '../../config';
 import { notFound, unauthorized, conflict } from "../responses";
 
 const verifyJwtToken = (req: Request | any, res: Response, next: NextFunction): Response | undefined => {
-
-    let token: string | undefined = req.header('auth-token');
+    let token: string | undefined = req.header('authorization');
 
     if (!token) {
         return notFound(res, 'Access Denied, token required');

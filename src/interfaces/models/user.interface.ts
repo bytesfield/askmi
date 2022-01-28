@@ -6,6 +6,7 @@ export interface BaseUserInterface {
   username: string;
   email: string;
   password: string;
+  emailVerifiedAt: Date;
 }
 
 export interface UserInterface extends BaseUserInterface {

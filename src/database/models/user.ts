@@ -14,6 +14,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     username!: string;
     email!: string;
     password!: string;
+    emailVerifiedAt!: Date;
 
     static associate(models: any) {
       User.hasOne(models.Otp);
@@ -31,11 +32,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
     },
     firstName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     username: {
       type: DataTypes.STRING,
@@ -49,7 +50,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
+    },
+    emailVerifiedAt: {
+      type: DataTypes.DATE,
+      allowNull: true
+
     }
   }, {
     sequelize,
