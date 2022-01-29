@@ -1,7 +1,6 @@
 'use strict';
 
 import { Model } from 'sequelize';
-
 import { UserInterface } from "../../interfaces/models/user.interface";
 
 
@@ -18,7 +17,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
 
     static associate(models: any) {
       User.hasOne(models.Otp);
-      // define association here
+      User.hasMany(models.Question);
+      User.hasMany(models.Notification);
+      User.hasMany(models.Answer);
+      User.hasMany(models.Comment);
+      User.hasMany(models.Vote);
+      User.belongsToMany(models.Question, { through: "Subscribers" });
     }
   }
 
@@ -32,25 +36,54 @@ module.exports = (sequelize: any, DataTypes: any) => {
     },
     firstName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        isAlpha: true,
+        notNull: {
+          msg: "firstName is required"
+        }
+      }
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        isAlpha: true,
+        notNull: {
+          msg: "lastName is required"
+        }
+      }
     },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      validate: {
+        isAlphanumeric: true,
+        notNull: {
+          msg: "username is required"
+        }
+      }
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      validate: {
+        isEmail: true,
+        notNull: {
+          msg: "email is required"
+        }
+      }
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "password is required"
+        }
+      }
     },
     emailVerifiedAt: {
       type: DataTypes.DATE,

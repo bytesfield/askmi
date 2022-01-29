@@ -1,5 +1,6 @@
 import { IRead } from '../../interfaces/read.interface';
 import { IWrite } from '../../interfaces/write.interface';
+import { isNull } from '../../utils/helpers.util';
 
 export abstract class BaseRepository<T> implements IRead<T>, IWrite<T> {
 
@@ -63,6 +64,32 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T> {
      */
     public async find(item: T): Promise<T[]> {
         return this._model.findAll();
+    }
+
+    /**
+     * Find Results and count of a Model with condition
+     * 
+     * @param {object}} condition 
+     * 
+     * @returns Promise<T[]>
+     */
+    public async findAllWithCondition(condition: object): Promise<T[]> {
+        return this._model.findAll(condition);
+    }
+
+    /**
+     * Return the total items of a Model
+     * 
+     * @param {object} condition 
+     * 
+     * @returns Promise<number>
+     */
+    public async count(condition?: object): Promise<number> {
+        if (!isNull(condition)) {
+            return this._model.count({ where: { condition } });
+        }
+
+        return this._model.count();
     }
 
     /**

@@ -12,6 +12,4 @@ router.get('/verification/verify-account/:user_id/:token', asyncHandler(AuthCont
 router.post('/logout', verifyJwtToken, asyncHandler(AuthController.logout));
 
 
-
-
 export default router;

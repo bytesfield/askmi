@@ -1,4 +1,4 @@
-export default interface Pagination<T> {
+export default interface PaginationInterface<T> {
   page: number;
   pageCount: number;
   limit: number;
