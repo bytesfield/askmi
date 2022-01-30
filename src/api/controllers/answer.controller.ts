@@ -1,13 +1,16 @@
 import { Request, Response } from "express";
+import { AnswerInterface as AnswerModelInterface } from "../../interfaces/models/answer.interface";
 import { QuestionInterface as QuestionModelInterface } from "../../interfaces/models/question.interface";
 import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
 import { created, success } from "../responses";
+import { AnswerService } from "../services/answer.service";
 import { QuestionService } from "../services/question.service";
 
-var questionService: QuestionService = new QuestionService();
+var answerService: AnswerService = new AnswerService();
+
 
 /**
-   * Get all questions
+   * Get Question Answers
    * 
    * @param {Request} req
    * @param {Response} res
@@ -15,15 +18,15 @@ var questionService: QuestionService = new QuestionService();
    * @returns {Promise<Response|any>}
 */
 const index = async (req: Request | any, res: Response): Promise<Response | any> => {
-    const { query } = req;
+    const { questionId } = req.params;
 
-    const response = await questionService.findAllQuestions(query);
+    const response: AnswerModelInterface = await answerService.findByQuestion(questionId);
 
-    success(res, "Questions retrieved successfully", response);
+    success(res, "Answers retrieved successfully", response);
 }
 
 /**
-   * User create a question
+   * Create answer
    * 
    * @param {Request} req
    * @param {Response} res
@@ -31,34 +34,34 @@ const index = async (req: Request | any, res: Response): Promise<Response | any>
    * @returns {Promise<Response|any>}
 */
 const create = async (req: Request | any, res: Response): Promise<Response | any> => {
-    const { body } = req;
+    const { questionId } = req.params;
 
     const user: UserModelInterface = req.session.user;
 
-    const response = await questionService.createQuestion(body, user);
+    const response = await answerService.createAnswer(req.body, questionId, user);
 
-    created(res, "Question created successfully", response);
+    created(res, "Answer created successfully", response);
 }
 
 /**
-   * Find a question
+   * Find an answer
    * 
    * @param {Request} req
    * @param {Response} res
    * 
    * @returns {Promise<Response|any>}
 */
-const find = async (req: Request | any, res: Response): Promise<Response | any> => {
-    const { questionId } = req.params;
+const show = async (req: Request | any, res: Response): Promise<Response | any> => {
+    const { answerId } = req.params;
 
-    const response: QuestionModelInterface = await questionService.findQuestionById(questionId);
+    const response: AnswerModelInterface = await answerService.findAnswerById(answerId);
 
-    success(res, "Question retrieved successfully", response);
+    success(res, "Answer retrieved successfully", response);
 }
 
 
 /**
-   * Update a question
+   * Update answer
    * 
    * @param {Request} req
    * @param {Response} res
@@ -66,17 +69,17 @@ const find = async (req: Request | any, res: Response): Promise<Response | any> 
    * @returns {Promise<Response|any>}
 */
 const update = async (req: Request | any, res: Response): Promise<Response | any> => {
-    const { questionId } = req.params;
+    const { answerId } = req.params;
 
     const user: UserModelInterface = req.session.user;
 
-    const response: QuestionModelInterface = await questionService.updateQuestion(questionId, req.body, user);
+    const response: AnswerModelInterface = await answerService.updateAnswer(answerId, req.body, user);
 
-    success(res, "Question updated successfully", response);
+    success(res, "Answer updated successfully", response);
 }
 
 /**
-   * Deletes a question
+   * Delete answer
    * 
    * @param {Request} req
    * @param {Response} res
@@ -84,19 +87,19 @@ const update = async (req: Request | any, res: Response): Promise<Response | any
    * @returns {Promise<Response|any>}
 */
 const destroy = async (req: Request | any, res: Response): Promise<Response | any> => {
-    const { questionId } = req.params;
+    const { answerId } = req.params;
 
     const user: UserModelInterface = req.session.user;
 
-    await questionService.deleteQuestion(questionId, user);
+    await answerService.deleteAnswer(answerId, user);
 
-    success(res, "Question deleted successfully");
+    success(res, "Answer deleted successfully");
 }
 
 export default {
     index,
     create,
-    find,
+    show,
     destroy,
     update
 }

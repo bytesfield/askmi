@@ -7,7 +7,7 @@ export default (error: any, req: Request, res: Response, next: NextFunction) => 
 
     const statusCode: number = error.statusCode || config.http.code.SERVER_ERROR;
     const status: string = error.status || config.http.status.FAILED;
-    const message: string = error.message || "Server Error Occured";
+    const message: string = error.message || "Server Error Occurred";
     const isOperational: string = error.isOperational || false;
 
     if (config.app.env === constants.env.production) {
@@ -18,7 +18,9 @@ export default (error: any, req: Request, res: Response, next: NextFunction) => 
         return buildResponse(res, message, status, statusCode);
     }
 
-    return buildResponse(res, message, status, statusCode, { error: error, stack: error.stack });
+    return buildResponse(res, message, status, statusCode);
+
+    //return buildResponse(res, message, status, statusCode, { error: error, stack: error.stack });
 
 }
 

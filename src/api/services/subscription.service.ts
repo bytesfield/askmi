@@ -2,8 +2,7 @@ import db from "../../database/models";
 import { QuestionInterface as QuestionModelInterface } from "../../interfaces/models/question.interface";
 import { UserInterface } from "../../interfaces/models/user.interface";
 import { SubscriptionInterface } from "../../interfaces/subscription.interface";
-import { isNull } from "../../utils/helpers.util";
-import HttpException from "../exceptions/HttpException";
+import HttpException from "../exceptions/http.exception";
 import { SubscriptionRepository } from "../repositories/subscription.repository";
 import { QuestionService } from "./question.service";
 
@@ -16,10 +15,6 @@ export class SubscriptionService implements SubscriptionInterface {
         const subscriptionRepository: SubscriptionRepository = new SubscriptionRepository(db.Subscribers);
 
         const question = await questionService.findQuestionById(questionId);
-
-        if (isNull(question)) {
-            throw new HttpException('Question was not found', 404);
-        }
 
         const isSubscribed: boolean = await subscriptionRepository.isSubscribed(questionId, user);
 
@@ -38,11 +33,8 @@ export class SubscriptionService implements SubscriptionInterface {
         const questionService: QuestionService = new QuestionService();
         const subscriptionRepository: SubscriptionRepository = new SubscriptionRepository(db.Subscribers);
 
-        const question = await questionService.findQuestionById(questionId);
+        await questionService.findQuestionById(questionId);
 
-        if (isNull(question)) {
-            throw new HttpException('Question was not found', 404);
-        }
 
         const isSubscribed: boolean = await subscriptionRepository.isSubscribed(questionId, user);
 

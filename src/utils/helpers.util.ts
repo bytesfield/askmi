@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { Request } from 'express';
-import HttpException from '../api/exceptions/HttpException';
-import { UserService } from '../api/services/user.service';
+import HttpException from '../api/exceptions/http.exception';
+import { QuestionService } from '../api/services/question.service';
 import config from '../config';
 import { UserInterface as UserModelInterface } from '../interfaces/models/user.interface';
 
@@ -46,3 +46,4 @@ export const isNull = (value: any): boolean => {
 
     return false;
 }
+

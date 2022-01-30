@@ -19,7 +19,6 @@ type verificationDataType = {
  * 
  * @param {Request} req 
  * @param {Response} res 
- * @param {NextFunction} next 
  * 
  * @returns {Promise<UserModelInterface>}
  */

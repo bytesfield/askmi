@@ -1,4 +1,3 @@
-import HttpException from './HttpException';
-import ValidationException from './ValidationException';
+import HttpException from './http.exception';
 
-export { HttpException, ValidationException };
+export { HttpException };

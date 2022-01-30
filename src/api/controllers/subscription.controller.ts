@@ -23,6 +23,27 @@ const subscribe = async (req: Request | any, res: Response | any): Promise<Respo
     created(res, "Subscribed to question successfully", response);
 }
 
+/**
+   * User unsubscribes from a question
+   * 
+   * @param {Request} req
+   * @param {Response} res
+   * 
+   * @returns {Promise<Response|any>}
+*/
+const unSubscribe = async (req: Request | any, res: Response | any): Promise<Response | any> => {
+    const { questionId } = req.params;
+
+    const user: UserModelInterface = req.session.user;
+
+    const subscriptionService: SubscriptionService = new SubscriptionService();
+
+    await subscriptionService.unSubscribe(questionId, user);
+
+    created(res, "Unsubscribed from question successfully");
+}
+
 export default {
-    subscribe
+    subscribe,
+    unSubscribe
 }
