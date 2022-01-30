@@ -1,6 +1,4 @@
 import { Request, Response } from 'express';
-import path from "path";
-import config from "../../../config";
 import dotenv from 'dotenv';
 import { JwtService } from "../../services/jwt.service";
 import { OtpService } from "../../services/otp.service";
@@ -8,16 +6,9 @@ import { UserService } from "../../services/user.service";
 import User from "../../../database/models";
 import Otp from "../../../database/models";
 import EmailVerification from "../../../utils/modules/send-email-verification";
+import { UserInterface as UserModelInterface } from '../../../interfaces/models/user.interface';
 
 dotenv.config();
-
-type signToken = {
-    expiresIn: number
-}
-
-const signTokenExpiry = {
-    expiresIn: 60 * 60 * 24 * 14,
-} as signToken;
 
 type verificationDataType = {
     baseUrl: string, userId: number, token: string
@@ -30,23 +21,18 @@ type verificationDataType = {
  * @param {Response} res 
  * @param {NextFunction} next 
  * 
- * @returns {Promise<typeof User>}
+ * @returns {Promise<UserModelInterface>}
  */
-const execute = async (req: Request | any, res: Response, userService: UserService): Promise<typeof User> => {
+const execute = async (req: Request | any, res: Response, userService: UserService): Promise<UserModelInterface> => {
 
     const email: string = req.body.email;
 
     const user: UserService | typeof User = await userService.createUser(req.body);
     const user_id: number = user.id;
 
-    const signTokenData = {
-        _id: user_id,
-    }
-
-    const signTokenSecret: string = config.jwt.secret;
     const jwtService = new JwtService();
 
-    const token: string = await jwtService.createToken(signTokenData, signTokenSecret, signTokenExpiry);
+    const { token } = await jwtService.generateToken(user);
 
     req.session.token = token;
 

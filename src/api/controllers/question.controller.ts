@@ -18,8 +18,7 @@ var userService: UserService = new UserService();
 const create = async (req: Request | any, res: Response): Promise<Response | any> => {
     const { body } = req;
 
-    const userId: number = req.session.user._id;
-    const user: UserModelInterface = await userService.findUserById(userId);
+    const user: UserModelInterface = req.session.user;
 
     const response = await questionService.createQuestion(body, user);
 

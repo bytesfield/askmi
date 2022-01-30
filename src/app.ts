@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieSession from "cookie-session";
 import config from "../src/config";
 import routes from "./routes";
-import ExceptionHandler from "../src/api/middlewares/ExceptionHandler";
+import ExceptionHandler from "./api/middlewares/exception-handler.middleware";
 import { HttpException } from "../src/api/exceptions";
 
 

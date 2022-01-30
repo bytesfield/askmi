@@ -3,5 +3,6 @@ import { QuestionInterface as QuestionModelInterface } from "./models/question.i
 
 export interface SubscriptionInterface {
     subscribe(questionId: number, user: UserInterface): Promise<QuestionModelInterface>
+    unSubscribe(questionId: number, user: UserInterface): Promise<boolean>
 
 }

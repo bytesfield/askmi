@@ -6,6 +6,7 @@ import { slugify } from '../../utils/string.util';
 import PaginationInterface from '../../interfaces/pagination.interface';
 import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
 import { QuestionInterface as QuestionModelInterface } from "../../interfaces/models/question.interface";
+import { SubscriptionService } from "./subscription.service";
 
 var questionRepo: QuestionRepository = new QuestionRepository(db.Question);
 
@@ -43,12 +44,18 @@ export class QuestionService implements QuestionInterface {
         const title: string = data.title;
         const slug: string = slugify(title);
 
-        return await questionRepo.create({
+        var subscriptionService: SubscriptionService = new SubscriptionService();
+
+        const question: QuestionModelInterface = await questionRepo.create({
             title: title,
             slug: slug,
             body: data.body,
             UserId: user.id
         });
+
+        subscriptionService.subscribe(question.id, user);
+
+        return question;
     }
 
     /**

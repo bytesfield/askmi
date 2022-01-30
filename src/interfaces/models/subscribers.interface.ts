@@ -1,8 +1,7 @@
 
 export interface BaseSubscribersInterface {
-  id: number;
-  questionId: number;
-  userId: number;
+  QuestionId: number;
+  UserId: number;
 }
 
 export interface SubscribersInterface extends BaseSubscribersInterface {
