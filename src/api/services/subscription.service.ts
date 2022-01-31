@@ -6,6 +6,7 @@ import { isNull } from "../../utils/helpers.util";
 import HttpException from "../exceptions/http.exception";
 import { SubscriptionRepository } from "../repositories/subscription.repository";
 import { QuestionService } from "./question.service";
+import constants from '../../utils/constants.util';
 
 export class SubscriptionService implements SubscribersInterface {
     createdAt?: Date | undefined;
@@ -31,7 +32,7 @@ export class SubscriptionService implements SubscribersInterface {
         const isSubscribed: boolean = await subscriptionRepository.isSubscribed(questionId, user);
 
         if (isSubscribed) {
-            throw new HttpException('User has already subscribed to this question', 403);
+            throw new HttpException(constants.messages.alreadySubscribed, 403);
         }
 
         await subscriptionRepository.create({ UserId: user.id, QuestionId: questionId });
@@ -57,7 +58,7 @@ export class SubscriptionService implements SubscribersInterface {
         const isSubscribed: boolean = await subscriptionRepository.isSubscribed(questionId, user);
 
         if (!isSubscribed) {
-            throw new HttpException('User has not subscribed to this question', 403);
+            throw new HttpException(constants.messages.alreadySubscribed, 403);
         }
 
         return await subscriptionRepository.deleteMultiple({ UserId: user.id, QuestionId: questionId });

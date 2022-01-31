@@ -2,9 +2,12 @@
 
 import { Model } from 'sequelize';
 import { CommentInterface } from "../../interfaces/models/comment.interface";
+import { UserInterface } from '../../interfaces/models/user.interface';
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Comment extends Model<CommentInterface> implements CommentInterface {
+    createdAt?: Date | undefined;
+    updatedAt?: Date | undefined;
 
     id!: number;
     body!: string;

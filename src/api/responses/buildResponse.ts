@@ -1,14 +1,7 @@
 import { Response } from "express";
+import { responseDataType } from "../../types/custom";
 
-type responseDataType = {
-    status: string,
-    statusCode: number,
-    message: string,
-    data?: {}
-    headers?: {}
-}
-
-const buildResponse = (response: Response, message: string, status: string, statusCode: number, data: any = null, headers: any = null): Response => {
+const buildResponse = (response: Response, message: string, status: boolean, statusCode: number, data: any = null, headers: any = null): Response => {
     const responseData: responseDataType = {
         status: status,
         statusCode: statusCode,

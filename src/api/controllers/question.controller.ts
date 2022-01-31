@@ -3,7 +3,7 @@ import { QuestionInterface as QuestionModelInterface } from "../../interfaces/mo
 import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
 import { created, success } from "../responses";
 import { QuestionService } from "../services/question.service";
-import { SubscriptionService } from "../services/subscription.service";
+import constants from '../../utils/constants.util';
 
 var questionService: QuestionService = new QuestionService();
 
@@ -20,7 +20,7 @@ const index = async (req: Request | any, res: Response): Promise<Response | any>
 
     const response = await questionService.findAllQuestions(query);
 
-    success(res, "Questions retrieved successfully", response);
+    success(res, constants.messages.retrievedSuccess, response);
 }
 
 /**
@@ -38,7 +38,7 @@ const create = async (req: Request | any, res: Response): Promise<Response | any
 
     const response = await questionService.createQuestion(body, user);
 
-    created(res, "Question created successfully", response);
+    created(res, constants.messages.createdSuccess, response);
 }
 
 /**
@@ -54,7 +54,7 @@ const find = async (req: Request | any, res: Response): Promise<Response | any> 
 
     const response: QuestionModelInterface = await questionService.findQuestionById(questionId);
 
-    success(res, "Question retrieved successfully", response);
+    success(res, constants.messages.retrievedSuccess, response);
 }
 
 
@@ -73,7 +73,7 @@ const update = async (req: Request | any, res: Response): Promise<Response | any
 
     const response: QuestionModelInterface = await questionService.updateQuestion(questionId, req.body, user);
 
-    success(res, "Question updated successfully", response);
+    success(res, constants.messages.updatedSuccess, response);
 }
 
 /**
@@ -91,7 +91,7 @@ const destroy = async (req: Request | any, res: Response): Promise<Response | an
 
     await questionService.deleteQuestion(questionId, user);
 
-    success(res, "Question deleted successfully");
+    success(res, constants.messages.deletedSuccess);
 }
 
 export default {

@@ -8,10 +8,20 @@ export class UserRepository extends BaseRepository<UserInterface>{
     /**
      * Find User by Email
      * 
-     * @param email 
-     * @returns Promise<User>
+     * @param {string} email 
+     * @returns {Promise<UserInterface>}
      */
     public async findUserByEmail(email: string): Promise<UserInterface> {
         return await db.User.findOne({ where: { email: email } });
+    }
+
+    /**
+     * Find User by Username
+     * 
+     * @param {string} username 
+     * @returns {Promise<UserInterface>}
+     */
+    public async findByUsername(username: string): Promise<UserInterface> {
+        return await db.User.findOne({ where: { username: username } });
     }
 }

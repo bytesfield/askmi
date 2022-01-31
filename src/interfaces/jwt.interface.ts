@@ -1,13 +1,7 @@
+import { generateTokenData, verifyTokenData } from "../types/custom";
 import { UserInterface as UserModelInterface } from "./models/user.interface";
 
-type generateTokenData = {
-    payload: UserModelInterface; token: string;
-}
-
-type verifyTokenData = {
-    verified: boolean; decoded: any;
-}
-export interface JwtInterface<T> {
+export interface JwtInterface {
     generateToken(payload: UserModelInterface): Promise<generateTokenData>;
     verifyToken(token: string): Promise<verifyTokenData>;
 

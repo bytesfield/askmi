@@ -45,7 +45,7 @@ export class NotificationService implements NotificationInterface {
         const notification: NotificationInterface = await notificationRepo.findOne(id);
 
         if (isNull(notification)) {
-            throw new HttpException('Notification was not found', 404);
+            throw new HttpException(constants.messages.notFound, 404);
         }
 
         return notification;

@@ -38,7 +38,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true,
         notNull: {
           msg: "firstName is required"
         }
@@ -48,7 +47,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true,
         notNull: {
           msg: "lastName is required"
         }
@@ -59,7 +57,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       allowNull: false,
       unique: true,
       validate: {
-        isAlphanumeric: true,
         notNull: {
           msg: "username is required"
         }

@@ -6,13 +6,13 @@ import constants from '../../utils/constants.util';
 export default (error: any, req: Request, res: Response, next: NextFunction) => {
 
     const statusCode: number = error.statusCode || config.http.code.SERVER_ERROR;
-    const status: string = error.status || config.http.status.FAILED;
+    const status: boolean = error.status || false;
     const message: string = error.message || "Server Error Occurred";
     const isOperational: string = error.isOperational || false;
 
     if (config.app.env === constants.env.production) {
         if (!isOperational) {
-            return serverError(res, 'Something went wrong.');
+            return serverError(res, constants.messages.somethingWentWrong);
         }
 
         return buildResponse(res, message, status, statusCode);

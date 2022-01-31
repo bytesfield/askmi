@@ -8,6 +8,7 @@ import { AnswerRepository } from "../repositories/answer.repository";
 import { QuestionRepository } from "../repositories/question.repository";
 import { NotificationService } from "./notification.service";
 import { QuestionService } from "./question.service";
+import constants from '../../utils/constants.util';
 
 var questionService: QuestionService = new QuestionService();
 var answerRepo: AnswerRepository = new AnswerRepository(db.Answer);
@@ -67,7 +68,7 @@ export class AnswerService implements AnswerInterface {
         const answer: AnswerInterface = await answerRepo.findOne(answerId);
 
         if (isNull(answer)) {
-            throw new HttpException('Answer was not found', 404);
+            throw new HttpException(constants.messages.notFound, 404);
         }
 
         return answer;
@@ -86,7 +87,7 @@ export class AnswerService implements AnswerInterface {
         const answer: AnswerInterface | any = await this.findAnswerById(answerId);
 
         if (answer.UserId != user.id) {
-            throw new HttpException("Answer not created by user", 403);
+            throw new HttpException(constants.messages.restrictedAccess, 403);
         }
 
         return answer;
@@ -105,7 +106,7 @@ export class AnswerService implements AnswerInterface {
         const answer: AnswerInterface | any = await this.findAnswerById(id);
 
         if (answer.UserId != user.id) {
-            throw new HttpException("Answer not created by user", 403);
+            throw new HttpException(constants.messages.restrictedAccess, 403);
         }
 
         await answerRepo.update(id, item);
@@ -146,13 +147,13 @@ export class AnswerService implements AnswerInterface {
         });
 
         if (!isNull(bestAnswer)) {
-            throw new HttpException("Best answer already exist", 400);
+            throw new HttpException(constants.messages.bestAnswerAlreadyExists, 400);
         }
 
         const question = await answer.getQuestion();
 
         if (question.UserId !== user.id) {
-            throw new HttpException("You dont have access to mark As Best Answer", 403);
+            throw new HttpException(constants.messages.restrictedAccess, 403);
         }
 
         await this.updateAnswer(answerId, { isBest: true }, user);

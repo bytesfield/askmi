@@ -19,11 +19,11 @@ export class UserService implements UserInterface {
     /**
      * Create a new User
      * 
-     * @param {UserInterface} item 
+     * @param {object} item 
      * 
      * @returns {Promise<UserInterface>}
      */
-    public async createUser(item: UserInterface): Promise<UserInterface> {
+    public async createUser(item: any): Promise<UserInterface> {
         return await userRepo.create(item);
     }
 
@@ -58,6 +58,17 @@ export class UserService implements UserInterface {
      */
     public async findUserByEmail(email: string): Promise<UserInterface> {
         return await userRepo.findUserByEmail(email);
+    }
+
+    /**
+     * Find a user by Username
+     * 
+     * @param {string} username 
+     * 
+     * @returns {Promise<UserInterface>}
+     */
+    public async findUserByUsername(username: string): Promise<UserInterface> {
+        return await userRepo.findByUsername(username);
     }
 
     /**

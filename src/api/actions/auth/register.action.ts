@@ -7,6 +7,7 @@ import User from "../../../database/models";
 import Otp from "../../../database/models";
 import EmailVerification from "../../../utils/modules/send-email-verification";
 import { UserInterface as UserModelInterface } from '../../../interfaces/models/user.interface';
+import { OtpInterface } from '../../../interfaces/models/otp.interface';
 
 dotenv.config();
 
@@ -36,7 +37,7 @@ const execute = async (req: Request | any, res: Response, userService: UserServi
     req.session.token = token;
 
     const otpService = new OtpService();
-    const otp: Promise<string> | typeof Otp = await otpService.generateOtp(email);
+    const otp: OtpInterface = await otpService.generateOtp(email);
 
     const baseUrl: string = req.protocol + "://" + req.get("host");
 
@@ -49,7 +50,7 @@ const execute = async (req: Request | any, res: Response, userService: UserServi
     };
 
     //Sends Email Verification to user
-    EmailVerification.send(email, verificationData);
+    await EmailVerification.send(email, verificationData);
 
     return user;
 

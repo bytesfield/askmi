@@ -2,13 +2,14 @@
 import { Request, Response, NextFunction } from 'express';
 import { notFound, unauthorized } from "../responses";
 import { JwtService } from '../services/jwt.service';
+import constants from "../../utils/constants.util";
 
 
 export default async (req: Request | any, res: Response, next: NextFunction): Promise<Response | void> => {
     let token: string | undefined = req.header('authorization');
 
     if (!token) {
-        return notFound(res, 'Access Denied, token required');
+        return notFound(res, constants.messages.tokenRequired);
     }
 
     if (token.startsWith('Bearer ')) {
@@ -20,7 +21,7 @@ export default async (req: Request | any, res: Response, next: NextFunction): Pr
     const { verified, decoded } = await jwtService.verifyToken(token);
 
     if (!verified) {
-        return unauthorized(res, 'Unauthorized Token');
+        return unauthorized(res, constants.messages.unauthorizedToken);
 
     }
 

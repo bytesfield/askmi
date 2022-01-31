@@ -1,10 +1,7 @@
 import dotenv from 'dotenv';
+import { email, mailgun, redis } from '../types/custom';
 
 dotenv.config();
-
-type mailgun = { secret: string, domain: string };
-type email = { host: string, username: string, password: string, port: string | number }
-type redis = { url: string }
 
 const services: { mailgun: mailgun, email: email, saltRounds: number, redis: redis } = {
     mailgun: {

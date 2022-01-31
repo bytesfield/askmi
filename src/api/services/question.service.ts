@@ -8,6 +8,8 @@ import { QuestionInterface } from "../../interfaces/models/question.interface";
 import { SubscriptionService } from "./subscription.service";
 import { isNull } from "../../utils/helpers.util";
 import { HttpException } from "../exceptions";
+import constants from '../../utils/constants.util';
+
 
 var questionRepo: QuestionRepository = new QuestionRepository(db.Question);
 var subscriptionService: SubscriptionService = new SubscriptionService();
@@ -76,7 +78,7 @@ export class QuestionService implements QuestionInterface {
         const question: QuestionInterface = await questionRepo.findOne(id);
 
         if (isNull(question)) {
-            throw new HttpException('Question was not found', 404);
+            throw new HttpException(constants.messages.notFound, 404);
         }
 
         return question;
@@ -95,7 +97,7 @@ export class QuestionService implements QuestionInterface {
         const question = await questionRepo.findByMultiple({ id: id, UserId: user.id });
 
         if (isNull(question)) {
-            throw new HttpException("Question not created by user", 403);
+            throw new HttpException(constants.messages.restrictedAccess, 403);
 
         }
 

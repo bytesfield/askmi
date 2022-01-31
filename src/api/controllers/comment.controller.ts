@@ -3,6 +3,7 @@ import { CommentInterface as CommentModelInterface } from "../../interfaces/mode
 import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
 import { created, success } from "../responses";
 import { CommentService } from "../services/comment.service";
+import constants from '../../utils/constants.util';
 
 var commentService: CommentService = new CommentService();
 
@@ -19,7 +20,7 @@ const index = async (req: Request | any, res: Response): Promise<Response | any>
 
     const response: CommentModelInterface = await commentService.findByAnswer(answerId);
 
-    success(res, "Comments retrieved successfully", response);
+    success(res, constants.messages.retrievedSuccess, response);
 }
 
 /**
@@ -37,7 +38,7 @@ const create = async (req: Request | any, res: Response): Promise<Response | any
 
     const response = await commentService.createComment(req.body, answerId, user);
 
-    created(res, "Comment created successfully", response);
+    created(res, constants.messages.createdSuccess, response);
 }
 
 /**
@@ -53,7 +54,7 @@ const show = async (req: Request | any, res: Response): Promise<Response | any> 
 
     const response: CommentModelInterface = await commentService.findCommentById(commentId);
 
-    success(res, "Comment retrieved successfully", response);
+    success(res, constants.messages.retrievedSuccess, response);
 }
 
 
@@ -72,7 +73,7 @@ const update = async (req: Request | any, res: Response): Promise<Response | any
 
     const response: CommentModelInterface = await commentService.updateComment(commentId, req.body, user);
 
-    success(res, "Comment updated successfully", response);
+    success(res, constants.messages.updatedSuccess, response);
 }
 
 /**
@@ -90,7 +91,7 @@ const destroy = async (req: Request | any, res: Response): Promise<Response | an
 
     await commentService.deleteComment(commentId, user);
 
-    success(res, "Comment deleted successfully");
+    success(res, constants.messages.deletedSuccess);
 }
 
 export default {

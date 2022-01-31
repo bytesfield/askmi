@@ -14,8 +14,8 @@ export default {
         'SERVICE_UNAVAILABLE': 503
     },
     status: {
-        'SUCCESS': 'success',
-        'FAILED': 'failed',
+        'SUCCESS': true,
+        'FAILED': false,
         'ERROR': 'error',
     }
 };

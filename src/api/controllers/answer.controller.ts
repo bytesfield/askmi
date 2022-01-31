@@ -3,6 +3,7 @@ import { AnswerInterface as AnswerModelInterface } from "../../interfaces/models
 import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
 import { created, success } from "../responses";
 import { AnswerService } from "../services/answer.service";
+import constants from '../../utils/constants.util';
 
 var answerService: AnswerService = new AnswerService();
 
@@ -19,7 +20,7 @@ const index = async (req: Request | any, res: Response): Promise<Response | any>
 
     const response: AnswerModelInterface = await answerService.findByQuestion(questionId);
 
-    success(res, "Answers retrieved successfully", response);
+    success(res, constants.messages.retrievedSuccess, response);
 }
 
 /**
@@ -37,7 +38,7 @@ const create = async (req: Request | any, res: Response): Promise<Response | any
 
     const response = await answerService.createAnswer(req.body, questionId, user);
 
-    created(res, "Answer created successfully", response);
+    created(res, constants.messages.createdSuccess, response);
 }
 
 /**
@@ -53,7 +54,7 @@ const show = async (req: Request | any, res: Response): Promise<Response | any> 
 
     const response: AnswerModelInterface = await answerService.findAnswerById(answerId);
 
-    success(res, "Answer retrieved successfully", response);
+    success(res, constants.messages.retrievedSuccess, response);
 }
 
 
@@ -72,7 +73,7 @@ const update = async (req: Request | any, res: Response): Promise<Response | any
 
     const response: AnswerModelInterface = await answerService.updateAnswer(answerId, req.body, user);
 
-    success(res, "Answer updated successfully", response);
+    success(res, constants.messages.updatedSuccess, response);
 }
 
 /**
@@ -90,7 +91,7 @@ const destroy = async (req: Request | any, res: Response): Promise<Response | an
 
     await answerService.deleteAnswer(answerId, user);
 
-    success(res, "Answer deleted successfully");
+    success(res, constants.messages.deletedSuccess);
 }
 
 /**
@@ -107,7 +108,7 @@ const markAsBestAnswer = async (req: Request | any, res: Response): Promise<Resp
 
     const answer: AnswerModelInterface = await answerService.markAsBestAnswer(answerId, user);
 
-    return success(res, 'Best answer selected successfully', answer);
+    return success(res, constants.messages.bestAnswerSelectedSuccess, answer);
 };
 
 export default {

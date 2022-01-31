@@ -1,25 +1,14 @@
-import { NextFunction } from "express";
 import jwt from "jsonwebtoken";
-
 import config from "../../config";
 import { JwtInterface } from "../../interfaces/jwt.interface";
 import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
-import { HttpException } from "../exceptions";
-import { notFound, unauthorized } from "../responses";
-
+import { generateTokenData, verifyTokenData } from "../../types/custom";
 
 const signTokenExpiry = {
     expiresIn: 60 * 60 * 24 * 14,
 };
 
-type generateTokenData = {
-    payload: UserModelInterface; token: string;
-}
-
-type verifyTokenData = {
-    verified: boolean; decoded: any;
-}
-export class JwtService implements JwtInterface<any>{
+export class JwtService implements JwtInterface {
 
     /**
      * Generate Token

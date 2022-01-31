@@ -5,6 +5,7 @@ import { isNull } from "../../utils/helpers.util";
 import { HttpException } from "../exceptions";
 import { CommentRepository } from "../repositories/comment.repository";
 import { AnswerService } from "./answer.service";
+import constants from '../../utils/constants.util';
 
 var answerService: AnswerService = new AnswerService();
 var commentRepo: CommentRepository = new CommentRepository(db.Comment);
@@ -57,7 +58,7 @@ export class CommentService implements CommentInterface {
         const comment: CommentInterface = await commentRepo.findOne(commentId);
 
         if (isNull(comment)) {
-            throw new HttpException('Comment was not found', 404);
+            throw new HttpException(constants.messages.notFound, 404);
         }
 
         return comment;
@@ -76,7 +77,7 @@ export class CommentService implements CommentInterface {
         const comment: CommentInterface | any = await this.findCommentById(commentId);
 
         if (comment.UserId != user.id) {
-            throw new HttpException("Comment not created by user", 403);
+            throw new HttpException(constants.messages.restrictedAccess, 403);
         }
 
         return comment;
@@ -95,7 +96,7 @@ export class CommentService implements CommentInterface {
         const comment: CommentInterface | any = await this.findCommentById(id);
 
         if (comment.UserId != user.id) {
-            throw new HttpException("Comment not created by user", 403);
+            throw new HttpException(constants.messages.restrictedAccess, 403);
         }
 
         await commentRepo.update(id, item);

@@ -8,12 +8,11 @@ import LoginAction from "../actions/auth/login.action";
 import { OtpService } from "./otp.service";
 import db from "../../database/models";
 import EmailVerification from "../../utils/modules/send-email-verification";
+import { verificationDataType } from "../../types/custom";
+import constants from '../../utils/constants.util';
+import { UserInterface } from "../../interfaces/models/user.interface";
 
 var userService: UserService = new UserService();
-
-type verificationDataType = {
-    baseUrl: string, userId: number, token: string
-}
 
 export class AuthService implements AuthInterface {
 
@@ -28,10 +27,16 @@ export class AuthService implements AuthInterface {
     public async register(req: Request, res: Response, next: NextFunction): Promise<any> {
         const email: string = req.body.email;
 
-        const emailExist = await userService.findUserByEmail(email);
+        const emailExist: UserInterface = await userService.findUserByEmail(email);
 
         if (!isNull(emailExist)) {
-            throw new HttpException(`Email already exist.`, 409);
+            throw new HttpException(constants.messages.emailExists, 409);
+        }
+
+        const userNameExist: UserInterface = await userService.findUserByUsername(req.body.username);
+
+        if (!isNull(userNameExist)) {
+            throw new HttpException(constants.messages.usernameExists, 409);
         }
 
         req.body.password = await hash(req.body.password);
@@ -54,19 +59,19 @@ export class AuthService implements AuthInterface {
         const user = await userService.findUserByEmail(email);
 
         if (isNull(user)) {
-            throw new HttpException(`Email or password is wrong.`, 400);
+            throw new HttpException(constants.messages.invalidCredentials, 400);
         }
 
         const isActive = await userService.isUserActivated(user);
 
         if (!isActive) {
-            throw new HttpException(`Email has not been verified.`, 400);
+            throw new HttpException(constants.messages.emailNotVerified, 400);
         }
 
         const isPasswordValid: boolean = await compare(password, user.password);
 
         if (!isPasswordValid) {
-            throw new HttpException(`Email or password is wrong.`, 400);
+            throw new HttpException(constants.messages.invalidCredentials, 400);
         }
 
         return await LoginAction.execute(req, res, user);
@@ -95,13 +100,13 @@ export class AuthService implements AuthInterface {
         });
 
         if (isNull(otp)) {
-            throw new HttpException('Activation Link is expired or used already', 409);
+            throw new HttpException(constants.messages.invalidActivationLink, 409);
         }
 
         const isOtpExpired = await otpService.isOtpExpired(email, token);
 
         if (isOtpExpired) {
-            throw new HttpException('Activation Link is expired or used already', 409);
+            throw new HttpException(constants.messages.invalidActivationLink, 409);
         }
 
         const userService = new UserService();
