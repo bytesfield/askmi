@@ -1,25 +1,32 @@
-import { OtpInterface } from "../../interfaces/otp.interface";
-import { UserRepository } from "../repositories/user.repository";
 import { OtpRepository } from "../repositories/otp.repository";
 import db from "../../database/models";
 import { HttpException } from "../../../src/api/exceptions";
 import { isEmptyObject, addMinutes, isNull } from "../../utils/helpers.util";
 import { generateRandomString } from "../../utils/helpers";
+import { UserService } from "./user.service";
+import { UserInterface } from "../../interfaces/models/user.interface";
+import { OtpInterface } from "../../interfaces/models/otp.interface";
 
 var otpRepo: OtpRepository = new OtpRepository(db.Otp);
 export class OtpService implements OtpInterface {
+    createdAt?: Date | undefined;
+    updatedAt?: Date | undefined;
+    id!: number;
+    email!: string;
+    token!: string;
+    expiresAt!: Date;
 
     /**
      * Generates new Otp Token
      * 
-     * @param string email 
+     * @param {string} email 
      * 
-     * @returns Promise<typeof db.Otp>
+     * @returns {Promise<typeof db.Otp>}
      */
-    public async generateOtp(email: string): Promise<typeof db.Otp> {
-        const userRepo: UserRepository = new UserRepository(db.User);
+    public async generateOtp(email: string): Promise<OtpInterface> {
+        const userService: UserService = new UserService();
 
-        const user = await userRepo.findUserByEmail(email);
+        const user: UserInterface = await userService.findUserByEmail(email);
 
         if (!isEmptyObject(user)) {
             new HttpException(`Email already exist.`, 409)
@@ -52,42 +59,42 @@ export class OtpService implements OtpInterface {
     /**
       * Find Otp by UserId
       * 
-      * @param number id 
+      * @param {number} id 
       * 
-      * @returns Promise<typeof db.Otp>
+      * @returns {Promise<OtpInterface>}
       */
-    public async findOtpByUserId(id: number): Promise<typeof db.Otp> {
+    public async findOtpByUserId(id: number): Promise<OtpInterface> {
         return await otpRepo.findOtpByUserId(id);
     }
 
     /**
      * Find Otp by Email
      * 
-     * @param string email 
+     * @param {string} email 
      * 
-     * @returns Promise<typeof db.Otp>
+     * @returns {Promise<OtpInterface>}
      */
-    public async findOtpByEmail(email: string): Promise<typeof db.Otp> {
+    public async findOtpByEmail(email: string): Promise<OtpInterface> {
         return await otpRepo.findOtpByEmail(email);
     }
 
     /**
      * Find Otp by Email
      * 
-     * @param string email 
+     * @param {string} email 
      * 
-     * @returns Promise<typeof db.Otp>
+     * @returns {Promise<OtpInterface>}
      */
-    public async findOtpByMultiple(obj: object): Promise<typeof db.Otp> {
+    public async findOtpByMultiple(obj: object): Promise<OtpInterface> {
         return await otpRepo.findByMultiple(obj);
     }
 
     /**
      * Delete an Otp
      * 
-     * @param number id 
+     * @param {number} id 
      * 
-     * @returns Promise<boolean>
+     * @returns {Promise<boolean>}
      */
     public async deleteOtp(id: number): Promise<boolean> {
         return await otpRepo.delete(id);
@@ -96,10 +103,10 @@ export class OtpService implements OtpInterface {
     /**
      * Check if otp is yet to expire
      * 
-     * @param string email 
-     * @param string token 
+     * @param {string} email 
+     * @param {string} token 
      * 
-     * @returns Promise<boolean>
+     * @returns {Promise<boolean>}
      */
     public async isOtpYetToExpire(email: string, token: string): Promise<boolean> {
 
@@ -112,10 +119,10 @@ export class OtpService implements OtpInterface {
     /**
      * Check if otp has expired
      * 
-     * @param email 
-     * @param token 
+     * @param {string} email 
+     * @param {string} token 
      * 
-     * @returns Promise<boolean>
+     * @returns {Promise<boolean>}
      */
     public async isOtpExpired(email: string, token: string): Promise<boolean> {
         const otp = await otpRepo.otpExpired(email, token);

@@ -27,7 +27,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true,
         notNull: {
           msg: "title is required"
         }

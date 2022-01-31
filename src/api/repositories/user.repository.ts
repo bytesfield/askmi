@@ -1,9 +1,9 @@
 import { BaseRepository } from "./base.repository";
 import db from "../../database/models";
-import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
+import { UserInterface } from "../../interfaces/models/user.interface";
 
 // now, we have all code implementation from BaseRepository
-export class UserRepository extends BaseRepository<UserModelInterface>{
+export class UserRepository extends BaseRepository<UserInterface>{
 
     /**
      * Find User by Email
@@ -11,7 +11,7 @@ export class UserRepository extends BaseRepository<UserModelInterface>{
      * @param email 
      * @returns Promise<User>
      */
-    public async findUserByEmail(email: string): Promise<UserModelInterface> {
+    public async findUserByEmail(email: string): Promise<UserInterface> {
         return await db.User.findOne({ where: { email: email } });
     }
 }

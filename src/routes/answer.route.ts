@@ -13,6 +13,8 @@ router.delete('/:answerId', authUser, asyncHandler(AnswerController.destroy));
 router.post('/:answerId/comments', authUser, asyncHandler(CommentController.create));
 router.get('/:answerId/comments', asyncHandler(CommentController.index));
 
+router.patch('/:answerId/best-answer', authUser, asyncHandler(AnswerController.markAsBestAnswer));
+
 
 
 export default router;

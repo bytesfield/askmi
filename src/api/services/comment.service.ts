@@ -1,7 +1,5 @@
 import db from "../../database/models";
-import { CommentInterface } from "../../interfaces/comment.interface";
-import { CommentInterface as CommentModelInterface } from "../../interfaces/models/comment.interface";
-import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
+import { CommentInterface } from "../../interfaces/models/comment.interface";
 import { UserInterface } from "../../interfaces/models/user.interface";
 import { isNull } from "../../utils/helpers.util";
 import { HttpException } from "../exceptions";
@@ -12,8 +10,19 @@ var answerService: AnswerService = new AnswerService();
 var commentRepo: CommentRepository = new CommentRepository(db.Comment);
 
 export class CommentService implements CommentInterface {
+    createdAt?: Date | undefined;
+    updatedAt?: Date | undefined;
+    id!: number;
+    body!: string;
 
-    public async createComment(data: Record<string, string>, answerId: number, user: UserInterface): Promise<CommentModelInterface> {
+    /**
+     * User comment on an answer
+     * @param {Record<string, string>} data 
+     * @param {number} answerId 
+     * @param {UserInterface} user 
+     * @returns {Promise<CommentInterface>}
+     */
+    public async createComment(data: Record<string, string>, answerId: number, user: UserInterface): Promise<CommentInterface> {
 
         await answerService.findAnswerById(answerId);
 
@@ -31,7 +40,7 @@ export class CommentService implements CommentInterface {
      * 
      * @returns {Promise<AnswerModelInterface>}
      */
-    public async findByAnswer(answerId: number): Promise<CommentModelInterface> {
+    public async findByAnswer(answerId: number): Promise<CommentInterface> {
         await answerService.findAnswerById(answerId);
 
         return await commentRepo.findByMultiple({ AnswerId: answerId });
@@ -42,10 +51,10 @@ export class CommentService implements CommentInterface {
      * FInd Comment by Id
      * @param {number} commentId 
      * 
-     * @returns {CommentModelInterface}
+     * @returns {CommentInterface}
      */
-    public async findCommentById(commentId: number): Promise<CommentModelInterface> {
-        const comment: CommentModelInterface = await commentRepo.findOne(commentId);
+    public async findCommentById(commentId: number): Promise<CommentInterface> {
+        const comment: CommentInterface = await commentRepo.findOne(commentId);
 
         if (isNull(comment)) {
             throw new HttpException('Comment was not found', 404);
@@ -58,13 +67,13 @@ export class CommentService implements CommentInterface {
      * Find a user comment to an answer
      * 
      * @param {number} commentId
-     * @param {UserModelInterface} user 
+     * @param {UserInterface} user 
      * 
-     * @returns {Promise<CommentModelInterface>}
+     * @returns {Promise<CommentInterface>}
      */
-    public async userComment(commentId: number, user: UserModelInterface): Promise<CommentModelInterface> {
+    public async userComment(commentId: number, user: UserInterface): Promise<CommentInterface> {
 
-        const comment: CommentModelInterface | any = await this.findCommentById(commentId);
+        const comment: CommentInterface | any = await this.findCommentById(commentId);
 
         if (comment.UserId != user.id) {
             throw new HttpException("Comment not created by user", 403);
@@ -78,12 +87,12 @@ export class CommentService implements CommentInterface {
     * 
     * @param {number} id 
     * @param {object} item 
-    * @param {UserModelInterface} user 
+    * @param {UserInterface} user 
     * 
-    * @returns {Promise<CommentModelInterface>}
+    * @returns {Promise<CommentInterface>}
     */
-    public async updateComment(id: number, item: object | any, user: UserModelInterface): Promise<CommentModelInterface> {
-        const comment: CommentModelInterface | any = await this.findCommentById(id);
+    public async updateComment(id: number, item: object | any, user: UserInterface): Promise<CommentInterface> {
+        const comment: CommentInterface | any = await this.findCommentById(id);
 
         if (comment.UserId != user.id) {
             throw new HttpException("Comment not created by user", 403);
@@ -98,11 +107,11 @@ export class CommentService implements CommentInterface {
      * Delete a comment
      * 
      * @param {number} id 
-     * @param {UserModelInterface} user 
+     * @param {UserInterface} user 
      * 
      * @returns Promise<boolean>
      */
-    public async deleteComment(id: number, user: UserModelInterface): Promise<boolean> {
+    public async deleteComment(id: number, user: UserInterface): Promise<boolean> {
 
         await this.findCommentById(id);
 

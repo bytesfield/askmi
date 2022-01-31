@@ -93,10 +93,28 @@ const destroy = async (req: Request | any, res: Response): Promise<Response | an
     success(res, "Answer deleted successfully");
 }
 
+/**
+ * Mark as best answer.
+ *
+ * @param {Request}  req
+ * @param {Response} res
+ *
+ * @returns {Promise<Response>}
+ */
+const markAsBestAnswer = async (req: Request | any, res: Response): Promise<Response | any> => {
+    const user: UserModelInterface = req.session.user;
+    const { answerId } = req.params;
+
+    const answer: AnswerModelInterface = await answerService.markAsBestAnswer(answerId, user);
+
+    return success(res, 'Best answer selected successfully', answer);
+};
+
 export default {
     index,
     create,
     show,
     destroy,
-    update
+    update,
+    markAsBestAnswer
 }

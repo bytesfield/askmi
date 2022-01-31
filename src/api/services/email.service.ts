@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken";
 import { EmailInterface } from "../../interfaces/email.interface";
 import nodemailer from "../../utils/modules/nodemailer";
 

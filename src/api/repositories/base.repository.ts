@@ -58,11 +58,16 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T> {
     /**
      * Find All Result of a Model
      * 
-     * @param T item 
+     * @param {object} condition 
      * 
      * @returns Promise<T[]>
      */
-    public async find(item: T): Promise<T[]> {
+    public async find(condition?: object): Promise<T[]> {
+
+        if (!isNull(condition)) {
+            return this._model.findAll(condition);
+        }
+
         return this._model.findAll();
     }
 

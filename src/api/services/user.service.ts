@@ -1,22 +1,29 @@
-import { UserInterface } from "../../interfaces/user.interface";
 import { UserRepository } from "../repositories/user.repository";
 import db from "../../database/models";
-import { Op } from "sequelize";
 import { isNull } from "../../utils/helpers.util";
-import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
+import { UserInterface } from "../../interfaces/models/user.interface";
 
 var userRepo: UserRepository = new UserRepository(db.User);
 
 export class UserService implements UserInterface {
+    createdAt?: Date | undefined;
+    updatedAt?: Date | undefined;
+    id!: number;
+    firstName!: string;
+    lastName!: string;
+    username!: string;
+    email!: string;
+    password!: string;
+    emailVerifiedAt!: Date;
 
     /**
      * Create a new User
      * 
-     * @param {UserModelInterface} item 
+     * @param {UserInterface} item 
      * 
-     * @returns {Promise<UserModelInterface>}
+     * @returns {Promise<UserInterface>}
      */
-    public async createUser(item: UserModelInterface): Promise<UserModelInterface> {
+    public async createUser(item: UserInterface): Promise<UserInterface> {
         return await userRepo.create(item);
     }
 
@@ -24,11 +31,11 @@ export class UserService implements UserInterface {
      * Update a User
      * 
      * @param {number} id 
-     * @param {UserModelInterface} item 
+     * @param {object} item 
      * 
-     * @returns {Promise<UserModelInterface>}
+     * @returns {Promise<UserInterface>}
      */
-    public async updateUser(id: number, item: UserModelInterface): Promise<UserModelInterface> {
+    public async updateUser(id: number, item: any): Promise<UserInterface> {
         return await userRepo.update(id, item);
     }
 
@@ -36,9 +43,9 @@ export class UserService implements UserInterface {
      * Find a user by Id
      * @param id 
      * 
-     * @returns {Promise<UserModelInterface>}
+     * @returns {Promise<UserInterface>}
      */
-    public async findUserById(id: number): Promise<UserModelInterface> {
+    public async findUserById(id: number): Promise<UserInterface> {
         return await userRepo.findOne(id);
     }
 
@@ -47,9 +54,9 @@ export class UserService implements UserInterface {
      * 
      * @param {string} email 
      * 
-     * @returns {Promise<UserModelInterface>}
+     * @returns {Promise<UserInterface>}
      */
-    public async findUserByEmail(email: string): Promise<UserModelInterface> {
+    public async findUserByEmail(email: string): Promise<UserInterface> {
         return await userRepo.findUserByEmail(email);
     }
 
@@ -58,9 +65,9 @@ export class UserService implements UserInterface {
      * 
      * @param {object} obj 
      * 
-     * @returns {Promise<UserModelInterface>}
+     * @returns {Promise<UserInterface>}
      */
-    public async findUserByMultiple(obj: object): Promise<UserModelInterface> {
+    public async findUserByMultiple(obj: object): Promise<UserInterface> {
         return await userRepo.findByMultiple(obj);
     }
 

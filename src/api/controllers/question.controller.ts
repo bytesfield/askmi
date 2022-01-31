@@ -3,6 +3,7 @@ import { QuestionInterface as QuestionModelInterface } from "../../interfaces/mo
 import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
 import { created, success } from "../responses";
 import { QuestionService } from "../services/question.service";
+import { SubscriptionService } from "../services/subscription.service";
 
 var questionService: QuestionService = new QuestionService();
 

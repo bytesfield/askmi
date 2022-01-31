@@ -1,30 +1,46 @@
 import db from "../../database/models";
-import { AnswerInterface } from "../../interfaces/answer.interface";
-import { AnswerInterface as AnswerModelInterface } from "../../interfaces/models/answer.interface";
-import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
+import { AnswerInterface } from "../../interfaces/models/answer.interface";
+import { QuestionInterface } from "../../interfaces/models/question.interface";
 import { UserInterface } from "../../interfaces/models/user.interface";
 import { isNull } from "../../utils/helpers.util";
 import { HttpException } from "../exceptions";
 import { AnswerRepository } from "../repositories/answer.repository";
+import { QuestionRepository } from "../repositories/question.repository";
+import { NotificationService } from "./notification.service";
 import { QuestionService } from "./question.service";
 
 var questionService: QuestionService = new QuestionService();
 var answerRepo: AnswerRepository = new AnswerRepository(db.Answer);
-
+var notificationService = new NotificationService();
 export class AnswerService implements AnswerInterface {
+    createdAt?: Date | undefined;
+    updatedAt?: Date | undefined;
+    id!: number;
+    body!: string;
+    isFirst!: boolean;
+    isBest!: boolean;
 
-    public async createAnswer(data: Record<string, string>, questionId: number, user: UserInterface): Promise<AnswerModelInterface> {
+    public async createAnswer(data: Record<string, string>, questionId: number, user: UserInterface): Promise<AnswerInterface> {
 
-        await questionService.findQuestionById(questionId);
+        const question: QuestionInterface = await questionService.findQuestionById(questionId);
 
         const questionAnswers = await answerRepo.findByMultiple({ QuestionId: questionId });
 
-        return await answerRepo.create({
+        const answer: AnswerInterface = await answerRepo.create({
             body: data.body,
             QuestionId: questionId,
             isFirst: isNull(questionAnswers) ? true : false,
             UserId: user.id
         });
+
+        await notificationService.sendAnswerNotification(question, user);
+
+        const questionRepo: QuestionRepository = new QuestionRepository(db.Question);
+
+        await questionRepo.update(questionId, { isAnswered: true });
+
+        return answer;
+
     }
 
     /**
@@ -32,9 +48,9 @@ export class AnswerService implements AnswerInterface {
      * 
      * @param {number} questionId 
      * 
-     * @returns {Promise<AnswerModelInterface>}
+     * @returns {Promise<AnswerInterface>}
      */
-    public async findByQuestion(questionId: number): Promise<AnswerModelInterface> {
+    public async findByQuestion(questionId: number): Promise<AnswerInterface> {
         await questionService.findQuestionById(questionId);
 
         return await answerRepo.findByMultiple({ QuestionId: questionId });
@@ -45,10 +61,10 @@ export class AnswerService implements AnswerInterface {
      * Find Answer by Id
      * 
      * @param {number} answerId 
-     * @returns {Promise<AnswerModelInterface>}
+     * @returns {Promise<AnswerInterface>}
      */
-    public async findAnswerById(answerId: number): Promise<AnswerModelInterface> {
-        const answer: AnswerModelInterface = await answerRepo.findOne(answerId);
+    public async findAnswerById(answerId: number): Promise<AnswerInterface> {
+        const answer: AnswerInterface = await answerRepo.findOne(answerId);
 
         if (isNull(answer)) {
             throw new HttpException('Answer was not found', 404);
@@ -61,13 +77,13 @@ export class AnswerService implements AnswerInterface {
      * Find a user answer to a question
      * 
      * @param {number} answerId
-     * @param {UserModelInterface} user 
+     * @param {UserInterface} user 
      * 
-     * @returns {Promise<AnswerModelInterface>}
+     * @returns {Promise<AnswerInterface>}
      */
-    public async userAnswer(answerId: number, user: UserModelInterface): Promise<AnswerModelInterface> {
+    public async userAnswer(answerId: number, user: UserInterface): Promise<AnswerInterface> {
 
-        const answer: AnswerModelInterface | any = await this.findAnswerById(answerId);
+        const answer: AnswerInterface | any = await this.findAnswerById(answerId);
 
         if (answer.UserId != user.id) {
             throw new HttpException("Answer not created by user", 403);
@@ -81,12 +97,12 @@ export class AnswerService implements AnswerInterface {
     * 
     * @param {number} id 
     * @param {object} item 
-    * @param {UserModelInterface} user 
+    * @param {UserInterface} user 
     * 
-    * @returns {Promise<AnswerModelInterface>}
+    * @returns {Promise<AnswerInterface>}
     */
-    public async updateAnswer(id: number, item: object | any, user: UserModelInterface): Promise<AnswerModelInterface> {
-        const answer: AnswerModelInterface | any = await this.findAnswerById(id);
+    public async updateAnswer(id: number, item: object | any, user: UserInterface): Promise<AnswerInterface> {
+        const answer: AnswerInterface | any = await this.findAnswerById(id);
 
         if (answer.UserId != user.id) {
             throw new HttpException("Answer not created by user", 403);
@@ -101,16 +117,48 @@ export class AnswerService implements AnswerInterface {
      * Delete an answer
      * 
      * @param {number} id 
-     * @param {UserModelInterface} user 
+     * @param {UserInterface} user 
      * 
      * @returns Promise<boolean>
      */
-    public async deleteAnswer(id: number, user: UserModelInterface): Promise<boolean> {
+    public async deleteAnswer(id: number, user: UserInterface): Promise<boolean> {
 
         await this.findAnswerById(id);
 
         await this.userAnswer(id, user);
 
         return await answerRepo.delete(id);
+    }
+
+    /**
+     * Mark an answer as best
+     * 
+     * @param {number} answerId 
+     * @param {UserInterface} user 
+     * 
+     * @returns {Promise<AnswerInterface>}
+     */
+    public async markAsBestAnswer(answerId: number, user: UserInterface): Promise<AnswerInterface> {
+        const answer: AnswerInterface | any = await this.findAnswerById(answerId);
+
+        const bestAnswer: AnswerInterface = await answerRepo.findByMultiple({
+            QuestionId: answer.QuestionId, isBest: true
+        });
+
+        if (!isNull(bestAnswer)) {
+            throw new HttpException("Best answer already exist", 400);
+        }
+
+        const question = await answer.getQuestion();
+
+        if (question.UserId !== user.id) {
+            throw new HttpException("You dont have access to mark As Best Answer", 403);
+        }
+
+        await this.updateAnswer(answerId, { isBest: true }, user);
+
+        await notificationService.sendBestAnswerNotification(answer, user);
+
+        return answer;
     }
 }
