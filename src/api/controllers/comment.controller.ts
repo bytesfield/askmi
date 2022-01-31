@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { AnswerInterface as AnswerModelInterface } from "../../interfaces/models/answer.interface";
+import { CommentInterface as CommentModelInterface } from "../../interfaces/models/comment.interface";
 import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
 import { created, success } from "../responses";
-import { AnswerService } from "../services/answer.service";
+import { CommentService } from "../services/comment.service";
 
-var answerService: AnswerService = new AnswerService();
+var commentService: CommentService = new CommentService();
 
 /**
-   * Get Question Answers
+   * Get Answer Comments
    * 
    * @param {Request} req
    * @param {Response} res
@@ -15,15 +15,15 @@ var answerService: AnswerService = new AnswerService();
    * @returns {Promise<Response|any>}
 */
 const index = async (req: Request | any, res: Response): Promise<Response | any> => {
-    const { questionId } = req.params;
+    const { answerId } = req.params;
 
-    const response: AnswerModelInterface = await answerService.findByQuestion(questionId);
+    const response: CommentModelInterface = await commentService.findByAnswer(answerId);
 
-    success(res, "Answers retrieved successfully", response);
+    success(res, "Comments retrieved successfully", response);
 }
 
 /**
-   * Create answer
+   * Create comment
    * 
    * @param {Request} req
    * @param {Response} res
@@ -31,17 +31,17 @@ const index = async (req: Request | any, res: Response): Promise<Response | any>
    * @returns {Promise<Response|any>}
 */
 const create = async (req: Request | any, res: Response): Promise<Response | any> => {
-    const { questionId } = req.params;
+    const { answerId } = req.params;
 
     const user: UserModelInterface = req.session.user;
 
-    const response = await answerService.createAnswer(req.body, questionId, user);
+    const response = await commentService.createComment(req.body, answerId, user);
 
-    created(res, "Answer created successfully", response);
+    created(res, "Comment created successfully", response);
 }
 
 /**
-   * Find an answer
+   * Find an comment
    * 
    * @param {Request} req
    * @param {Response} res
@@ -49,16 +49,16 @@ const create = async (req: Request | any, res: Response): Promise<Response | any
    * @returns {Promise<Response|any>}
 */
 const show = async (req: Request | any, res: Response): Promise<Response | any> => {
-    const { answerId } = req.params;
+    const { commentId } = req.params;
 
-    const response: AnswerModelInterface = await answerService.findAnswerById(answerId);
+    const response: CommentModelInterface = await commentService.findCommentById(commentId);
 
-    success(res, "Answer retrieved successfully", response);
+    success(res, "Comment retrieved successfully", response);
 }
 
 
 /**
-   * Update answer
+   * Update comment
    * 
    * @param {Request} req
    * @param {Response} res
@@ -66,13 +66,13 @@ const show = async (req: Request | any, res: Response): Promise<Response | any> 
    * @returns {Promise<Response|any>}
 */
 const update = async (req: Request | any, res: Response): Promise<Response | any> => {
-    const { answerId } = req.params;
+    const { commentId } = req.params;
 
     const user: UserModelInterface = req.session.user;
 
-    const response: AnswerModelInterface = await answerService.updateAnswer(answerId, req.body, user);
+    const response: CommentModelInterface = await commentService.updateComment(commentId, req.body, user);
 
-    success(res, "Answer updated successfully", response);
+    success(res, "Comment updated successfully", response);
 }
 
 /**
@@ -84,13 +84,13 @@ const update = async (req: Request | any, res: Response): Promise<Response | any
    * @returns {Promise<Response|any>}
 */
 const destroy = async (req: Request | any, res: Response): Promise<Response | any> => {
-    const { answerId } = req.params;
+    const { commentId } = req.params;
 
     const user: UserModelInterface = req.session.user;
 
-    await answerService.deleteAnswer(answerId, user);
+    await commentService.deleteComment(commentId, user);
 
-    success(res, "Answer deleted successfully");
+    success(res, "Comment deleted successfully");
 }
 
 export default {

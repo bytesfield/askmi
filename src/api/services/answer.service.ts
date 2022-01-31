@@ -30,7 +30,7 @@ export class AnswerService implements AnswerInterface {
     /**
      * Find Answers by Question Id
      * 
-     * @param {number} id 
+     * @param {number} questionId 
      * 
      * @returns {Promise<AnswerModelInterface>}
      */
@@ -41,6 +41,12 @@ export class AnswerService implements AnswerInterface {
 
     }
 
+    /**
+     * Find Answer by Id
+     * 
+     * @param {number} answerId 
+     * @returns {Promise<AnswerModelInterface>}
+     */
     public async findAnswerById(answerId: number): Promise<AnswerModelInterface> {
         const answer: AnswerModelInterface = await answerRepo.findOne(answerId);
 
