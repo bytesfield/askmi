@@ -8,8 +8,10 @@ import constants from "../../utils/constants.util";
 import { VoteRepository } from "../repositories/vote.repository";
 import db from "../../database/models";
 import { isNull } from "../../utils/helpers.util";
+import { NotificationService } from "./notification.service";
 
 const voteRepo: VoteRepository = new VoteRepository(db.Vote);
+const answerService: AnswerService = new AnswerService();
 
 export class VoteService implements VoteInterface {
     createdAt?: Date | undefined;
@@ -20,13 +22,12 @@ export class VoteService implements VoteInterface {
 
     public async vote(answerId: number, user: UserInterface, type: vote): Promise<AnswerInterface> {
 
-        const answerService: AnswerService = new AnswerService();
+        const notificationService: NotificationService = new NotificationService();
         const userId: number = user.id;
 
         const answer: AnswerInterface | any = await answerService.findAnswerById(answerId);
-        const answerUser: UserInterface = answer.getUser();
 
-        if (answerUser.id === userId) {
+        if (answer.UserId === userId) {
             throw new HttpException(constants.messages.canNotVoteYourself, 403);
         }
 
@@ -38,62 +39,38 @@ export class VoteService implements VoteInterface {
             throw new HttpException(constants.messages.alreadyVoted, 403);
         }
 
+        const reversedVoted: VoteInterface = await voteRepo.findByMultiple({ AnswerId: answerId, UserId: userId, type: reversed });
+
+        if (reversedVoted) {
+            await voteRepo.update(reversedVoted.id, { type: type });
+
+            await notificationService.sendVoteNotification(answer, user, type);
+
+            return answer;
+        }
+
+        await voteRepo.create({
+            AnswerId: answerId,
+            UserId: userId,
+            type: type
+        })
+
+
+        await notificationService.sendVoteNotification(answer, user, type);
+
         return answer;
-
-        // const reversedVoted: VoteInterface | undefined = post.votes.find(
-        //     (voteRecord: VoteInterface) =>
-        //         voteRecord.user.toString() === user.id && voteRecord.type === reversed
-        // );
-
-        // if (reversedVoted) {
-        //     await Post.updateOne(
-        //         { _id: postId, 'votes._id': reversedVoted._id },
-        //         { $set: { 'votes.$.type': type } }
-        //     );
-
-        //     await this.notificationService.sendVoteNotification(post, user, type);
-
-        //     return post;
-        // }
-
-        // await Post.updateOne(
-        //     { _id: postId },
-        //     { $push: { votes: { type, user: user.id } } }
-        // );
-
-        // await this.notificationService.sendVoteNotification(post, user, type);
-
-        // return post;
     }
 
-    // public async delete(postId: string, user: UserInterface): Promise<boolean> {
-    //     if (!isValidObjectId(postId)) {
-    //         throw new HttpException(constants.postNotFound, 404);
-    //     }
+    public async deleteVote(answerId: number, user: UserInterface): Promise<boolean> {
 
-    //     const post = await Post.findById(postId);
+        await answerService.findAnswerById(answerId);
 
-    //     if (!post) {
-    //         throw new HttpException(constants.postNotFound, 404);
-    //     }
+        const hasVoted: VoteInterface = await voteRepo.findByMultiple({ AnswerId: answerId, UserId: user.id });
 
-    //     const hasVoted: boolean = post.votes.some(
-    //         (voteRecord: VoteInterface) => voteRecord.user.toString() === user.id
-    //     );
+        if (isNull(hasVoted)) {
+            throw new HttpException(constants.messages.notVoted, 403);
+        }
 
-    //     if (!hasVoted) {
-    //         throw new HttpException(constants.notVoted, 403);
-    //     }
-
-    //     await post.updateOne({ $pull: { votes: { user: user.id } } });
-
-    //     return true;
-
-    // }
-    // public async deleteVote?(answerId: number, user: UserInterface): Promise<boolean> {
-
-    // }
-
-
-
+        return await voteRepo.delete(hasVoted.id);
+    }
 }

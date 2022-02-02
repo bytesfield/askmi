@@ -19,4 +19,12 @@ export default class UserFactory {
             emailVerifiedAt: new Date()
         });
     }
+
+    public async login(data: Record<string, string> = {}): Promise<{ user: UserInterface; token: string }> {
+        const user: UserInterface = await this.create(data);
+
+        const userService = new UserService();
+
+        return userService.login({ email: user.email, password: 'Password@123' });
+    }
 }

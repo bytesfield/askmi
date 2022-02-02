@@ -1,5 +1,5 @@
 import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
-import { created } from "../responses";
+import { created, success } from "../responses";
 import constants from '../../utils/constants.util';
 import { SubscriptionService } from "../services/subscription.service";
 
@@ -20,7 +20,7 @@ const subscribe = async (req: Request | any, res: Response | any): Promise<Respo
 
     const response = await subscriptionService.subscribe(questionId, user);
 
-    created(res, constants.messages.subscribedToQuestion, response);
+    success(res, constants.messages.subscribedToQuestion, response);
 }
 
 /**
@@ -40,7 +40,7 @@ const unSubscribe = async (req: Request | any, res: Response | any): Promise<Res
 
     await subscriptionService.unSubscribe(questionId, user);
 
-    created(res, constants.messages.unsubscribedFromQuestion);
+    success(res, constants.messages.unsubscribedFromQuestion);
 }
 
 export default {

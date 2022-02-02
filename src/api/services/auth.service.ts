@@ -111,18 +111,11 @@ export class AuthService implements AuthInterface {
 
         const userService = new UserService();
 
-        const activateUser = await userService.updateUser(user.id,
+        await userService.updateUser(user.id,
             { emailVerifiedAt: new Date() }
         );
 
-        const deleteUserCode = await otpService.deleteOtp(otp.id);
-
-        if (activateUser && deleteUserCode) {
-            return true;
-        }
-
-        return false
-
+        return await otpService.deleteOtp(otp.id);
     }
 
     /**

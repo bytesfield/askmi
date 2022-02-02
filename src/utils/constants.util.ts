@@ -8,6 +8,7 @@ export default {
     tokenRequired: "Access Denied, token required",
     emailNotVerified: "Email has not been verified.",
     unauthorizedToken: "Unauthorized Token",
+    notSubscribed: "You are not subscribed",
     unauthorizedAccess: 'Unauthorized access',
     invalidActivationLink: 'Activation Link is expired or used already',
     notFound: '%s was not found',
@@ -37,6 +38,7 @@ export default {
     bestAnswerAlreadyExists: 'Best answer already selected for this question',
     bestAnswerSelectedSuccess: 'Best answer selected successfully',
     notificationAlreadyRead: 'Notification already marked as read',
+    markNotificationAsRead: 'Notification marked as read successfully',
   },
   notifications: {
     vote: 'Vote notification',

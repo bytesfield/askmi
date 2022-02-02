@@ -37,7 +37,7 @@ const execute = async (req: Request | any, res: Response, next: NextFunction, us
     };
 
     //Sends Email Verification to user
-    EmailVerification.send(email, verificationData);
+    await EmailVerification.send(email, verificationData);
 
     return user;
 }

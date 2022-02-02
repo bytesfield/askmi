@@ -10,9 +10,7 @@ import { isNull } from "../../utils/helpers.util";
 import { HttpException } from "../exceptions";
 import constants from '../../utils/constants.util';
 
-
 var questionRepo: QuestionRepository = new QuestionRepository(db.Question);
-var subscriptionService: SubscriptionService = new SubscriptionService();
 
 export class QuestionService implements QuestionInterface {
     createdAt?: Date | undefined;
@@ -61,7 +59,9 @@ export class QuestionService implements QuestionInterface {
             UserId: user.id
         });
 
-        subscriptionService.subscribe(question.id, user);
+        const subscriptionService: SubscriptionService = new SubscriptionService();
+
+        await subscriptionService.subscribe(question.id, user);
 
         return question;
     }
@@ -113,11 +113,11 @@ export class QuestionService implements QuestionInterface {
      * 
      * @returns {Promise<QuestionInterface>}
      */
-    public async updateQuestion(id: number, item: object | any, user?: UserInterface | any): Promise<QuestionInterface> {
-        const question: QuestionInterface = await this.findQuestionById(id);
+    public async updateQuestion(id: number, item: object | any, user: UserInterface): Promise<QuestionInterface> {
+        const question: QuestionInterface | any = await this.findQuestionById(id);
 
-        if (!isNull(user)) {
-            await this.userQuestion(id, user);
+        if (user && question.UserId !== user.id) {
+            throw new HttpException(constants.messages.restrictedAccess, 403);
         }
 
         const title: string = item.title;

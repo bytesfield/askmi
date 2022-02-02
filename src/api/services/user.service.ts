@@ -1,7 +1,10 @@
 import { UserRepository } from "../repositories/user.repository";
 import db from "../../database/models";
-import { isNull } from "../../utils/helpers.util";
-import { UserInterface } from "../../interfaces/models/user.interface";
+import { compare, isNull } from "../../utils/helpers.util";
+import { UserInterface, UserLoginInterface } from "../../interfaces/models/user.interface";
+import { HttpException } from "../exceptions";
+import { JwtService } from "./jwt.service";
+import constants from "../../utils/constants.util";
 
 var userRepo: UserRepository = new UserRepository(db.User);
 
@@ -113,6 +116,25 @@ export class UserService implements UserInterface {
      */
     public async deleteUserMultiple(obj: object): Promise<boolean> {
         return await userRepo.deleteMultiple(obj);
+    }
+
+    public async login(data: UserLoginInterface): Promise<{ user: UserInterface; token: string; }> {
+        const user: UserInterface = await userRepo.findUserByEmail(data.email);
+
+        const passwordMatches = user && (await compare(data.password, user.password));
+
+        if (!(user && passwordMatches)) {
+            throw new HttpException(constants.messages.invalidCredentials, 400);
+        }
+
+        const jwtService: JwtService = new JwtService();
+
+        const { token } = await jwtService.generateToken(user);
+
+        return {
+            user,
+            token
+        };
     }
 
 }

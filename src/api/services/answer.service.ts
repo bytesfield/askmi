@@ -105,7 +105,7 @@ export class AnswerService implements AnswerInterface {
     public async updateAnswer(id: number, item: object | any, user: UserInterface): Promise<AnswerInterface> {
         const answer: AnswerInterface | any = await this.findAnswerById(id);
 
-        if (answer.UserId != user.id) {
+        if (user && answer.UserId != user.id) {
             throw new HttpException(constants.messages.restrictedAccess, 403);
         }
 
@@ -150,13 +150,13 @@ export class AnswerService implements AnswerInterface {
             throw new HttpException(constants.messages.bestAnswerAlreadyExists, 400);
         }
 
-        const question = await answer.getQuestion();
+        const question: QuestionInterface | any = await answer.getQuestion();
 
         if (question.UserId !== user.id) {
             throw new HttpException(constants.messages.restrictedAccess, 403);
         }
 
-        await this.updateAnswer(answerId, { isBest: true }, user);
+        await answerRepo.update(answerId, { isBest: true });
 
         await notificationService.sendBestAnswerNotification(answer, user);
 

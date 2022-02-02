@@ -55,6 +55,15 @@ SubscriptionNotification.process('bestAnswer', async (job) => {
     logger.info('Best answer notifications sent to subscribers.');
 });
 
+// Process vote notification job.
+SubscriptionNotification.process('vote', async (job) => {
+    const { receiverId, content, title } = job.data;
+
+    const notificationService = new NotificationService();
+
+    await notificationService.notifyReceiver(receiverId, title, content);
+});
+
 // Log all errors.
 SubscriptionNotification.on('failed', (job, error) => {
     logger.info(`Unable to send ${job.data.title}`);

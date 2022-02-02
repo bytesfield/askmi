@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import config from "../../config";
 import { JwtInterface } from "../../interfaces/jwt.interface";
-import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
+import { UserInterface } from "../../interfaces/models/user.interface";
 import { generateTokenData, verifyTokenData } from "../../types/custom";
 
 const signTokenExpiry = {
@@ -13,11 +13,11 @@ export class JwtService implements JwtInterface {
     /**
      * Generate Token
      * 
-     * @param {UserModelInterface} payload 
+     * @param {UserInterface} payload 
      * 
      * @returns {generateTokenData}
      */
-    public async generateToken(payload: UserModelInterface): Promise<generateTokenData> {
+    public async generateToken(payload: UserInterface): Promise<generateTokenData> {
         try {
             const token = jwt.sign({ payload }, config.jwt.secret, signTokenExpiry);
 

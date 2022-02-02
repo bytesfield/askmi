@@ -10,6 +10,7 @@ import { UserService } from "./user.service";
 import util from 'util';
 import { QuestionInterface } from "../../interfaces/models/question.interface";
 import SubscriptionNotification from "../jobs/subscription.job";
+import { vote } from "../../types/custom";
 
 var notificationRepo: NotificationRepository = new NotificationRepository(db.Notification);
 var userService: UserService = new UserService();
@@ -120,6 +121,29 @@ export class NotificationService implements NotificationInterface {
         };
 
         await SubscriptionNotification.add('bestAnswer', notificationData);
+
+        return true;
+    }
+
+
+    public async sendVoteNotification(answer: AnswerInterface | any, user: UserInterface, type: vote): Promise<boolean> {
+
+        const question: QuestionInterface = answer.getQuestion();
+
+        const content = util.format(
+            constants.notificationContents.vote,
+            user.username,
+            constants.voteKeys[type],
+            question.title
+        );
+
+        const notificationData: Record<string, any> = {
+            title: constants.notifications.vote,
+            content,
+            receiverId: answer.UserId
+        };
+
+        await SubscriptionNotification.add('vote', notificationData);
 
         return true;
     }

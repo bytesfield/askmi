@@ -6,6 +6,6 @@ export default class OtpFactory {
     public async create(user: UserInterface): Promise<OtpInterface> {
         const service: OtpService = new OtpService();
 
-        return service.generateOtp(user.email);
+        return await service.generateOtp(user.email);
     }
 }

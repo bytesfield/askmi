@@ -2,7 +2,6 @@ import { BaseRepository } from "./base.repository";
 import db from "../../database/models";
 import { SubscribersInterface as SubscribersModelInterface } from "../../interfaces/models/subscribers.interface";
 import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
-import { UserRepository } from "./user.repository";
 import { isNull } from "../../utils/helpers.util";
 
 // now, we have all code implementation from BaseRepository

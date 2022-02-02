@@ -18,3 +18,8 @@ export interface UserInterface extends BaseUserInterface {
   findUserByMultiple?(obj: object): Promise<UserInterface>;
   deleteUser?(id: number): Promise<boolean>;
 }
+
+export interface UserLoginInterface {
+  email: UserInterface['email'];
+  password: UserInterface['password'];
+}

@@ -5,6 +5,7 @@ import { UserService } from "../../services/user.service";
 import { AuthService } from "../../services/auth.service";
 import EmailActivationAction from '../../actions/auth/email-activation.action';
 import constants from '../../../utils/constants.util';
+import { UserInterface } from '../../../interfaces/models/user.interface';
 
 var userService: UserService = new UserService();
 var authService: AuthService = new AuthService();
@@ -46,7 +47,7 @@ const verifyAccount = async (req: Request | any, res: Response, next: NextFuncti
         return notFound(res, constants.messages.notFound);
     }
 
-    const isVerified: Promise<boolean> = authService.verifyAccount(req, res, next, user);
+    const isVerified: boolean = await authService.verifyAccount(req, res, next, user);
 
     if (!isVerified) {
         return conflict(res, constants.messages.somethingWentWrong);
@@ -82,17 +83,9 @@ const login = async (req: Request | any, res: Response, next: NextFunction): Pro
 */
 const getActivationEmail = async (req: Request | any, res: Response, next: NextFunction): Promise<Response | any> => {
 
-    const user_id: any = req.session.user._id;
+    const user: UserInterface = req.session.user;
 
-    const user = await userService.findUserById(user_id);
-
-    if (isNull(user)) {
-        return notFound(res, constants.messages.notFound);
-    }
-
-    await userService.deleteUserMultiple({ email: user.email });
-
-    const response = EmailActivationAction.execute(req, res, next, user);
+    const response = await EmailActivationAction.execute(req, res, next, user);
 
     return success(res, constants.messages.activationEmailSent, response)
 }

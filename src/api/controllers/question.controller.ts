@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { QuestionInterface as QuestionModelInterface } from "../../interfaces/models/question.interface";
+import { QuestionInterface } from "../../interfaces/models/question.interface";
 import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
 import { created, success } from "../responses";
 import { QuestionService } from "../services/question.service";
@@ -52,7 +52,7 @@ const create = async (req: Request | any, res: Response): Promise<Response | any
 const find = async (req: Request | any, res: Response): Promise<Response | any> => {
     const { questionId } = req.params;
 
-    const response: QuestionModelInterface = await questionService.findQuestionById(questionId);
+    const response: QuestionInterface = await questionService.findQuestionById(questionId);
 
     success(res, constants.messages.retrievedSuccess, response);
 }
@@ -71,7 +71,7 @@ const update = async (req: Request | any, res: Response): Promise<Response | any
 
     const user: UserModelInterface = req.session.user;
 
-    const response: QuestionModelInterface = await questionService.updateQuestion(questionId, req.body, user);
+    const response: QuestionInterface = await questionService.updateQuestion(questionId, req.body, user);
 
     success(res, constants.messages.updatedSuccess, response);
 }

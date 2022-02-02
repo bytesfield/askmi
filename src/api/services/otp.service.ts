@@ -6,6 +6,7 @@ import { generateRandomString } from "../../utils/helpers";
 import { UserService } from "./user.service";
 import { UserInterface } from "../../interfaces/models/user.interface";
 import { OtpInterface } from "../../interfaces/models/otp.interface";
+import constants from "../../utils/constants.util";
 
 var otpRepo: OtpRepository = new OtpRepository(db.Otp);
 export class OtpService implements OtpInterface {
@@ -28,8 +29,8 @@ export class OtpService implements OtpInterface {
 
         const user: UserInterface = await userService.findUserByEmail(email);
 
-        if (!isEmptyObject(user)) {
-            new HttpException(`Email already exist.`, 409)
+        if (isNull(user)) {
+            throw new HttpException(constants.messages.notFound, 404)
         }
 
         const otp = await otpRepo.otpYetToExpire(email);

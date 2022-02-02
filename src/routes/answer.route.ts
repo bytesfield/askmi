@@ -14,7 +14,8 @@ router.post('/:answerId/comments', authUser, asyncHandler(CommentController.crea
 router.get('/:answerId/comments', asyncHandler(CommentController.index));
 
 router.patch('/:answerId/best-answer', authUser, asyncHandler(AnswerController.markAsBestAnswer));
-
+router.post('/:answerId/vote', authUser, asyncHandler(AnswerController.createVote));
+router.delete('/:answerId/vote', authUser, asyncHandler(AnswerController.removeVote));
 
 
 export default router;

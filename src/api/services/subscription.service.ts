@@ -58,7 +58,7 @@ export class SubscriptionService implements SubscribersInterface {
         const isSubscribed: boolean = await subscriptionRepository.isSubscribed(questionId, user);
 
         if (!isSubscribed) {
-            throw new HttpException(constants.messages.alreadySubscribed, 403);
+            throw new HttpException(constants.messages.notSubscribed, 403);
         }
 
         return await subscriptionRepository.deleteMultiple({ UserId: user.id, QuestionId: questionId });
