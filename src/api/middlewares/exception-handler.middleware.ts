@@ -20,8 +20,6 @@ export default (error: any, req: Request, res: Response, next: NextFunction) => 
 
     return buildResponse(res, message, status, statusCode);
 
-    //return buildResponse(res, message, status, statusCode, { error: error, stack: error.stack });
-
 }
 
 

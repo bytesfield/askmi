@@ -67,6 +67,14 @@ export class NotificationService implements NotificationInterface {
         return notification;
     }
 
+    /**
+     * Mark Notification as read
+     * 
+     * @param {number} notificationId 
+     * @param {UserInterface} user 
+     * 
+     * @returns {Promise<NotificationInterface>}
+     */
     public async markAsRead(notificationId: number, user: UserInterface): Promise<NotificationInterface> {
         const notification: NotificationInterface = await this.findNotificationById(notificationId);
 
@@ -75,6 +83,16 @@ export class NotificationService implements NotificationInterface {
         return notification;
 
     }
+
+    /**
+     * Notify a receiver
+     * 
+     * @param {number} receiverId 
+     * @param {string} title 
+     * @param {string} content 
+     * 
+     * @returns {Promise<NotificationInterface>}
+     */
     public async notifyReceiver(receiverId: number, title: string, content: string): Promise<NotificationInterface> {
         const notification: NotificationInterface = await notificationRepo.create({
             title: title,
@@ -85,6 +103,14 @@ export class NotificationService implements NotificationInterface {
         return notification;
     }
 
+    /**
+     * Send Answer Notification to subscribers
+     * 
+     * @param {QuestionInterface} question 
+     * @param {UserInterface} user 
+     * 
+     * @returns {Promise<boolean>}
+     */
     public async sendAnswerNotification(question: QuestionInterface, user: UserInterface): Promise<boolean> {
         const content = util.format(
             constants.notificationContents.answer,
@@ -104,6 +130,14 @@ export class NotificationService implements NotificationInterface {
         return true;
     }
 
+    /**
+     * Send Best Answer Notification to user
+     * 
+     * @param {AnswerInterface} answer 
+     * @param {UserInterface} user 
+     * 
+     * @returns {Promise<boolean>}
+     */
     public async sendBestAnswerNotification(answer: AnswerInterface | any, user: UserInterface): Promise<boolean> {
         const question: QuestionInterface = await answer.getQuestion();
 
@@ -125,7 +159,15 @@ export class NotificationService implements NotificationInterface {
         return true;
     }
 
-
+    /**
+     * Send Vote Notification to user
+     * 
+     * @param {AnswerInterface} answer 
+     * @param {UserInterface} user 
+     * @param {vote} type 
+     * 
+     * @returns {Promise<boolean>}
+     */
     public async sendVoteNotification(answer: AnswerInterface | any, user: UserInterface, type: vote): Promise<boolean> {
 
         const question: QuestionInterface = answer.getQuestion();

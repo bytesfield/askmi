@@ -11,8 +11,8 @@ export class EmailService implements EmailInterface {
     /**
      * Gets Sender Email
      * 
-     * @param email 
-     * @returns 
+     * @param {string} email 
+     * @returns {this}
      */
     public from(email: string): this {
         this.sender = email;
@@ -21,8 +21,8 @@ export class EmailService implements EmailInterface {
     /**
      * Gets Recipient Email
      * 
-     * @param email 
-     * @returns this
+     * @param {string} email 
+     * @returns {this}
      */
     public to(email: string): this {
         this.recipient = email;
@@ -32,8 +32,8 @@ export class EmailService implements EmailInterface {
     /**
      * Gets Email Subject
      * 
-     * @param subject 
-     * @returns this
+     * @param {string} subject 
+     * @returns {this}
      */
     public subject(subject: string): this {
         this.emailSubject = subject;
@@ -43,8 +43,8 @@ export class EmailService implements EmailInterface {
     /**
      * Gets Email Message
      * 
-     * @param message 
-     * @returns this
+     * @param {string} message 
+     * @returns {this}
      */
     public message(message: string): this {
         this.emailMessage = message;
@@ -54,8 +54,8 @@ export class EmailService implements EmailInterface {
     /**
      * Gets Email Template
      * 
-     * @param template 
-     * @returns this
+     * @param {object} template 
+     * @returns {this}
      */
     public template(template: object): this {
         this.emailTemplate = template;
@@ -65,7 +65,7 @@ export class EmailService implements EmailInterface {
     /**
      * Sends the Actual Email
      * 
-     * @returns Promise<any>
+     * @returns {Promise<any>}
      */
     public async send(): Promise<any> {
 

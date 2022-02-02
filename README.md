@@ -52,7 +52,7 @@ Note: Use active emails for testing as you will receive emails to your inbox.
 
 # Documentation
 
-The API documentation is hosted on [Postman Doc](https://documenter.getpostman.com/view/10912779/TzRNGAEU)
+The API documentation is hosted on [Postman Doc](https://documenter.getpostman.com/view/10912779/UVeFMRvt)
 
 # Contribution
 

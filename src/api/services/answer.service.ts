@@ -21,6 +21,15 @@ export class AnswerService implements AnswerInterface {
     isFirst!: boolean;
     isBest!: boolean;
 
+    /**
+     * Create answer to a question
+     * 
+     * @param {Record<string, string>} data 
+     * @param {number} questionId 
+     * @param {UserInterface} user 
+     * 
+     * @returns {Promise<AnswerInterface>}
+     */
     public async createAnswer(data: Record<string, string>, questionId: number, user: UserInterface): Promise<AnswerInterface> {
 
         const question: QuestionInterface = await questionService.findQuestionById(questionId);
@@ -62,6 +71,7 @@ export class AnswerService implements AnswerInterface {
      * Find Answer by Id
      * 
      * @param {number} answerId 
+     * 
      * @returns {Promise<AnswerInterface>}
      */
     public async findAnswerById(answerId: number): Promise<AnswerInterface> {
@@ -120,7 +130,7 @@ export class AnswerService implements AnswerInterface {
      * @param {number} id 
      * @param {UserInterface} user 
      * 
-     * @returns Promise<boolean>
+     * @returns {Promise<boolean>}
      */
     public async deleteAnswer(id: number, user: UserInterface): Promise<boolean> {
 

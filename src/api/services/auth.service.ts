@@ -17,7 +17,8 @@ var userService: UserService = new UserService();
 export class AuthService implements AuthInterface {
 
     /**
-     * Logs a user in
+     * Registers a user
+     * 
      * @param {Request} req 
      * @param {Response} res 
      * @param {NextFunction} next 
@@ -46,6 +47,7 @@ export class AuthService implements AuthInterface {
 
     /**
      * Logs a user in
+     * 
      * @param {Request} req 
      * @param {Response} res 
      * @param {NextFunction} next 

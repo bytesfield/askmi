@@ -18,9 +18,11 @@ export class CommentService implements CommentInterface {
 
     /**
      * User comment on an answer
+     * 
      * @param {Record<string, string>} data 
      * @param {number} answerId 
      * @param {UserInterface} user 
+     * 
      * @returns {Promise<CommentInterface>}
      */
     public async createComment(data: Record<string, string>, answerId: number, user: UserInterface): Promise<CommentInterface> {
@@ -49,7 +51,8 @@ export class CommentService implements CommentInterface {
     }
 
     /**
-     * FInd Comment by Id
+     * Find Comment by Id
+     * 
      * @param {number} commentId 
      * 
      * @returns {CommentInterface}
@@ -110,7 +113,7 @@ export class CommentService implements CommentInterface {
      * @param {number} id 
      * @param {UserInterface} user 
      * 
-     * @returns Promise<boolean>
+     * @returns {Promise<boolean>}
      */
     public async deleteComment(id: number, user: UserInterface): Promise<boolean> {
 

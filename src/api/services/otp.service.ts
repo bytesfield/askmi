@@ -1,7 +1,7 @@
 import { OtpRepository } from "../repositories/otp.repository";
 import db from "../../database/models";
 import { HttpException } from "../../../src/api/exceptions";
-import { isEmptyObject, addMinutes, isNull } from "../../utils/helpers.util";
+import { addMinutes, isNull } from "../../utils/helpers.util";
 import { generateRandomString } from "../../utils/helpers";
 import { UserService } from "./user.service";
 import { UserInterface } from "../../interfaces/models/user.interface";

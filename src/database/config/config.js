@@ -3,24 +3,24 @@ const dotenv = require('dotenv');
 dotenv.config();
 module.exports = {
   "development": {
-    "username": "root",
-    "password": "root",
-    "database": "korapay",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": process.env.DB_DEV_USERNAME,
+    "password": process.env.DB_DEV_PASSWORD,
+    "database": process.env.DB_DEV_DATABASE,
+    "host": process.env.DB_DEV_HOST,
+    "dialect": process.env.DB_DEV_CONNECTION
   },
   "test": {
-    "username": process.env.DB_USERNAME,
-    "password": process.env.DB_PASSWORD,
-    "database": process.env.DB_DATABASE,
-    "host": process.env.DB_HOST,
-    "dialect": process.env.DB_CONNECTION
+    "username": process.env.DB_TEST_USERNAME,
+    "password": process.env.DB_TEST_PASSWORD,
+    "database": process.env.DB_TEST_DATABASE,
+    "host": process.env.DB_TEST_HOST,
+    "dialect": process.env.DB_TEST_CONNECTION
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": process.env.DB_PROD_USERNAME,
+    "password": process.env.DB_PROD_PASSWORD,
+    "database": process.env.DB_PROD_DATABASE,
+    "host": process.env.DB_PROD_HOST,
+    "dialect": process.env.DB_PROD_CONNECTION
   }
 }

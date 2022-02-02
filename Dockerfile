@@ -7,6 +7,6 @@ COPY package*.json .
 
 RUN yarn global add typescript pm2 && yarn
 
-EXPOSE 3000
+EXPOSE 5000
 
-CMD ["yarn", "run", "start"]
+CMD ["yarn", "run", "dev"]
