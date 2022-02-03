@@ -2,7 +2,7 @@
 
 # AskMi
 
-A Question and Answer Restful API.
+A Simple Question and Answer Restful API in Node JS (Typescript), Mysql with Sequelize ORM.
 
 # Description
 
@@ -14,8 +14,8 @@ This API is simple clone of Stack Overflow questions/answers system with a token
 
 Clone or download this repository to your machine:
 
-- Clone the repo: `git clone https://gitlab.com/korapay-assessment/be-abraham-udele/-/archive/main/be-abraham-udele.zip`
-- [Download from here](https://gitlab.com/korapay-assessment/be-abraham-udele/-/archive/main/be-abraham-udele.zip).
+- Clone the repo: `git clone https://github.com/bytesfield/askmi/archive/refs/heads/main.zip`
+- [Download from here](https://github.com/bytesfield/askmi/archive/refs/heads/main.zip).
 
 ## Step 2
 
