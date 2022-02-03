@@ -1,6 +1,6 @@
 <!-- @format -->
 
-# AskMi (KoraPay Technical Test)
+# AskMi
 
 A Question and Answer Restful API.
 
