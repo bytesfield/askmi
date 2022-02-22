@@ -13,7 +13,7 @@ export default async (req: Request | any, res: Response, next: NextFunction): Pr
     }
 
     if (token.startsWith('Bearer ')) {
-        token = token.slice(7, token.length).trimLeft();
+        token = token.slice(7, token.length).trimStart();
     }
 
     const jwtService = new JwtService();

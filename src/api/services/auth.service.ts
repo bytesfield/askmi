@@ -89,7 +89,7 @@ export class AuthService implements AuthInterface {
      * 
      * @returns {Promise<boolean>}
      */
-    public async verifyAccount(req: Request, res: Response, next: NextFunction, user: typeof db.User): Promise<boolean> {
+    public async verifyAccount(req: Request, res: Response, next: NextFunction, user: UserInterface): Promise<boolean> {
 
         const email: string = user.email;
         const token: string = req.params.token
@@ -130,7 +130,7 @@ export class AuthService implements AuthInterface {
      * 
      * @returns {Promise<User>}
      */
-    public async getActivationEmail(req: Request | any, res: Response, next: NextFunction, user: typeof db.User): Promise<typeof db.User> {
+    public async getActivationEmail(req: Request | any, res: Response, next: NextFunction, user: UserInterface): Promise<UserInterface> {
 
         const email: string = user.email;
 

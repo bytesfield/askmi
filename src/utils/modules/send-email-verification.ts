@@ -1,12 +1,8 @@
 
-import { NextFunction, Request, Response } from 'express';
 import path from "path";
 import config from "../../config";
 import { EmailService } from '../../api/services/email.service';
-
-type verificationDataType = {
-    baseUrl: string, userId: number, token: string
-}
+import { verificationDataType } from "../../types/custom";
 
 const send = async (email: string, verificationData: verificationDataType): Promise<EmailService> => {
 

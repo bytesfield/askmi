@@ -18,15 +18,15 @@ SubscriptionNotification.process('answer', async (job) => {
 
     const promises: any[] = [];
 
-    subscribers.forEach(subscriber => {
+    subscribers.forEach(async subscriber => {
         const notificationService = new NotificationService();
 
         promises.push(
-            notificationService.notifyReceiver(subscriber.id, title, content)
+            await notificationService.notifyReceiver(subscriber.id, title, content)
         );
     });
 
-    await Promise.all(promises);
+    Promise.all(promises);//Resolves all promises in the array same time or reject if any is rejected.
 
     logger.info('Answer notifications sent to subscribers.');
 });

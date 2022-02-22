@@ -55,7 +55,6 @@ export class VoteService implements VoteInterface {
             type: type
         })
 
-
         await notificationService.sendVoteNotification(answer, user, type);
 
         return answer;
@@ -73,4 +72,5 @@ export class VoteService implements VoteInterface {
 
         return await voteRepo.delete(hasVoted.id);
     }
+
 }

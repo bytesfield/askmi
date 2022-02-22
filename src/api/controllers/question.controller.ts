@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { QuestionInterface } from "../../interfaces/models/question.interface";
-import { UserInterface as UserModelInterface } from "../../interfaces/models/user.interface";
+import { UserInterface } from "../../interfaces/models/user.interface";
 import { created, success } from "../responses";
 import { QuestionService } from "../services/question.service";
 import constants from '../../utils/constants.util';
@@ -34,7 +34,7 @@ const index = async (req: Request | any, res: Response): Promise<Response | any>
 const create = async (req: Request | any, res: Response): Promise<Response | any> => {
     const { body } = req;
 
-    const user: UserModelInterface = req.session.user;
+    const user: UserInterface = req.session.user;
 
     const response = await questionService.createQuestion(body, user);
 
@@ -69,7 +69,7 @@ const find = async (req: Request | any, res: Response): Promise<Response | any> 
 const update = async (req: Request | any, res: Response): Promise<Response | any> => {
     const { questionId } = req.params;
 
-    const user: UserModelInterface = req.session.user;
+    const user: UserInterface = req.session.user;
 
     const response: QuestionInterface = await questionService.updateQuestion(questionId, req.body, user);
 
@@ -87,7 +87,7 @@ const update = async (req: Request | any, res: Response): Promise<Response | any
 const destroy = async (req: Request | any, res: Response): Promise<Response | any> => {
     const { questionId } = req.params;
 
-    const user: UserModelInterface = req.session.user;
+    const user: UserInterface = req.session.user;
 
     await questionService.deleteQuestion(questionId, user);
 
